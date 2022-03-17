@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="person_location:war">
+    <output-path>$PROJECT_DIR$/person_location/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>person_location</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="person-location-data.war">
+      <element id="artifact" artifact-name="person_location:war exploded" />
+    </root>
+  </artifact>
+</component>

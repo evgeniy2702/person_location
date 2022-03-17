@@ -1,0 +1,101 @@
+body {font-family: Arial, Helvetica, sans-serif;}
+
+/* Модальный (фон) */
+.modal {
+    display: none; /* Скрыто по умолчанию */
+    z-index: 1; /* Сидеть на вершине */
+    padding-top: 100px; /* Расположение коробки */
+    left: 0;
+    top: 0;
+    position: fixed;
+    width: 100%;
+    margin: 10px;
+    height: 100%; /* Полная высота */
+    overflow: auto; /* Включите прокрутку, если это необходимо */
+    background-color: rgb(0,0,0); /* Цвет запасной вариант  */
+    background-color: rgba(0,0,0,0.4); /*Черный с непрозрачностью */
+}
+
+.modal-content{
+    top: 10%;
+    left: 25%;
+    width: 50%;
+    height: 15%;
+    padding-bottom: 1%;
+}
+
+.date{
+    top: 10%;
+    left: 35%;
+    width: 30%;
+    height: 40%;
+    padding-bottom: 1%;
+}
+
+.map{
+    top: 10%;
+    left: 25%;
+    width: 50%;
+    height: 50%;
+    padding-bottom: 1%;
+}
+
+/* Кнопка закрытия */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+footer{
+    display: flex;
+    background: #fffcfc;
+    bottom: 0;
+    left: 0;
+    margin-top: 1%;
+    margin-left: 0%;
+    width: 100%;
+    height: 500px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    box-shadow: 0 5px 5px 0 darkgray;
+}
+
+.footerInfoBox {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    margin-top: 4px;
+    box-shadow: 0 2px 4px 1px #bfbfbf;
+}
+
+.footerBox {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    grid-gap: 2%;
+}
+
+.googleMap {
+    width: 100%;
+    height: 100%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
