@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <title>Person_Location_Ukrposhta</title>
     <link src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"
@@ -32,8 +32,8 @@
                                 <span class="close">&times;</span>
                                 <form th:id="linkFormName" th:action="@{~/person-location-data/person-list/by-lastname}"  th:method="post" >
 
-                                    <label id="name" >Введіть прізвище співробітника : </label>
-                                    <input th:name="name" type="search" placeholder="Котигорошoк"/>
+                                    <label for="name" >Введіть прізвище співробітника : </label>
+                                    <input id="name" th:name="name" type="search" placeholder="Котигорошoк"/>
 
                                     <input type="submit" th:form="linkFormName" value="Відправити" class="btn btn-info" />
 
@@ -53,10 +53,10 @@
                                 <span class="close">&times;</span>
                                 <form th:id="linkFormDate" th:action="@{~/person-location-data/person-list/by-date}"  th:method="post" >
                                     <div class="text-center">
-                                        <label id="day" >Оберіть дату останньої геолокації : </label>
+                                        <label for="day" >Оберіть дату останньої геолокації : </label>
                                     </div>
                                     <div class="text-center">
-                                        <input class="btn btn-outline-primary" th:name="date" type="date"/>
+                                        <input id="day" class="btn btn-outline-primary" th:name="date" type="date"/>
                                     </div>
                                     <div class="text-center">
                                         <input type="submit" th:form="linkFormDate" value="Відправити" class="btn btn-info" />
@@ -80,6 +80,43 @@
                             </li>
                         </ul>
                     </li>
+                    <!--<li >-->
+                        <!--&lt;!&ndash; Триггер / Открыть Модальный &ndash;&gt;-->
+                        <!--<a id="btnFilter" href="#modalFilter">Сортування за признаками Відпустка, Біженець, за Регіоном</a>-->
+
+                        <!--&lt;!&ndash; Модальном окно &ndash;&gt;-->
+                        <!--<div id="modalFilter" class="modal card-header text-center">-->
+
+                            <!--&lt;!&ndash; Модальное содержание &ndash;&gt;-->
+                            <!--<div class="modal-content date">-->
+                                <!--<span class="close">&times;</span>-->
+                                <!--<form th:id="linkFormFilter" th:action="@{~/person-location-data/refugee-vacation-dangerous-region}"  th:method="post" >-->
+                                    <!--<div class="text-center">-->
+                                        <!--<label for="vacation" >Відпустка : </label>-->
+                                    <!--</div>-->
+                                    <!--<div class="text-center">-->
+                                        <!--<input id="vacation" class="btn btn-outline-primary" th:name="vacation" type="checkbox"/>-->
+                                    <!--</div>-->
+                                    <!--<div class="text-center">-->
+                                        <!--<label for="refugee" >Біженець : </label>-->
+                                    <!--</div>-->
+                                    <!--<div class="text-center">-->
+                                        <!--<input id="refugee" class="btn btn-outline-primary" th:name="refugee" type="checkbox"/>-->
+                                    <!--</div>-->
+                                    <!--<div class="text-center">-->
+                                        <!--<label for="region" >Регіон : </label>-->
+                                    <!--</div>-->
+                                    <!--<div class="text-center">-->
+                                        <!--<input id="region" class="btn btn-outline-primary" th:name="region" type="checkbox"/>-->
+                                    <!--</div>-->
+                                    <!--<div class="text-center">-->
+                                        <!--<input type="submit" th:form="linkFormFilter" value="Відправити" class="btn btn-info" />-->
+                                    <!--</div>-->
+
+                                <!--</form>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</li>-->
                     <li>
 
                         <!-- Триггер / Открыть Модальный -->
@@ -166,7 +203,8 @@
 
                                                     <div class="footerInfoBox">
                                                         <div class="googleMap">
-                                                            <iframe th:src="${person.getGeolocation()}" allowfullscreen="" loading="lazy"></iframe>
+                                                            <!--<iframe th:src="@{'https://www.google.com/maps/embed/v1/place?key=AIzaSyCsFXx-hAhNheMt_16U1EABV8eqXmc38_s&q=' + ${person.getGeolocation()} + '&center=' + ${person.getGeolocation()} + '&zoom=10&maptype=roadmap&language=ru'}" allowfullscreen="" loading="lazy"></iframe>-->
+                                                            <iframe th:src="${person.getLink_geolocation()}" allowfullscreen="" loading="lazy"></iframe>
                                                         </div>
                                                     </div>
 
@@ -184,6 +222,9 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="card-footer text-center">
+        <a href="#" class="btn btn-secondary" >На початок сторінки</a>
     </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.js"

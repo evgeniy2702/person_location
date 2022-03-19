@@ -28,6 +28,9 @@ public class Person {
     private LocalDateTime last_modified;
     private String directorate;
     private String text_location;
+    private String link_geolocation;
+//    private boolean vocation;
+//    private boolean refugee;
 
 
 }

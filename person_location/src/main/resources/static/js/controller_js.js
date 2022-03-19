@@ -53,6 +53,34 @@ window.onclick = function(event) {
     }
 };
 
+// // PERSON BY REFUGEE and VOCATION
+//
+// // Get the modal
+// var modalFilter = document.getElementById("modalFilter");
+//
+// // Get the button that opens the modal
+// var btnFilter = document.getElementById("btnFilter");
+//
+// // Get the <span> element that closes the modal
+// var spanFilter = document.getElementsByClassName("close")[2];
+//
+// // When the user clicks the button, open the modal
+// btnFilter.onclick = function() {
+//         modalFilter.style.display = "block";
+// }
+//
+// // When the user clicks on <span> (x), close the modal
+// spanFilter.onclick = function() {
+//     modalFilter.style.display = "none";
+// }
+//
+// // When the user clicks anywhere outside of the modal, close it
+// window.onclick = function(event) {
+//     if (event.target === modalFilter) {
+//         modalFilter.style.display = "none";
+//     }
+// };
+
 // PERSON BY FHONE
 // Get the modal
 var modalPhone = document.getElementById("modalPhone");
@@ -66,12 +94,12 @@ var spanPhone = document.getElementsByClassName("close")[2];
 // When the user clicks the button, open the modal
 btnPhone.onclick = function() {
     modalPhone.style.display = "block";
-}
+};
 
 // When the user clicks on <span> (x), close the modal
 spanPhone.onclick = function() {
     modalPhone.style.display = "none";
-}
+};
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
