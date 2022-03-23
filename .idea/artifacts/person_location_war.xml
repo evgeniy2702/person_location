@@ -7,7 +7,7 @@
         <packaging>war</packaging>
       </options>
     </properties>
-    <root id="archive" name="person-location-data.war">
+    <root id="archive" name="person-location-data-filter.war">
       <element id="artifact" artifact-name="person_location:war exploded" />
     </root>
   </artifact>

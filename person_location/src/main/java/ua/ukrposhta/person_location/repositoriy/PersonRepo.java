@@ -19,6 +19,9 @@ public interface PersonRepo extends JpaRepository<Person, Long> {
     @Query("SELECT DISTINCT p.directorate FROM Person p WHERE p.directorate IS NOT NULL AND p.directorate <> '' ORDER BY p.directorate")
     List<String> allDirectorateName();
 
+    @Query("SELECT DISTINCT p.state FROM Person p WHERE p.state IS NOT NULL  AND p.state <> '' ORDER BY p.state")
+    List<String> allStatesList();
+
     @Query("SELECT p FROM Person p WHERE p.directorate = :directorate ORDER BY p.lastname")
     List<Person> findPersonByDirectorate(@Param("directorate") String directorate);
 
@@ -39,12 +42,29 @@ public interface PersonRepo extends JpaRepository<Person, Long> {
     @Query("SELECT p FROM Person p WHERE LOWER(p.lastname) LIKE LOWER(CONCAT('%',:lastname,'%')) ORDER BY p.lastname")
     List<Person> findPersonByLastname(@Param("lastname") String lastname);
 
-//    List<Person> findPersonByVocation(boolean vocation);
+    @Query("SELECT p FROM Person p WHERE p.vacation = :vacation ORDER BY p.lastname")
+    List<Person> findPersonByVacation(@Param("vacation") boolean vacation);
+
+    @Query("SELECT p FROM Person p WHERE p.refugee = :refugee ORDER BY p.lastname")
+    List<Person> findPersonByRefugee(@Param("refugee") boolean refugee);
+
+    @Query("SELECT p FROM Person p WHERE p.able_for_work = :ableForWork ORDER BY p.lastname")
+    List<Person> findPersonByAble_for_work(@Param("ableForWork") boolean able_for_work);
+
+    @Query("SELECT p FROM Person p WHERE p.work_remote = :workRemote ORDER BY p.lastname")
+    List<Person> findPersonByWork_remote(@Param("workRemote") boolean work_remote);
+
+    @Query("SELECT p FROM Person p WHERE p.work_by_place = :workByPlace ORDER BY p.lastname")
+    List<Person> findPersonByWork_by_place(@Param("workByPlace") boolean work_by_place);
+
+    @Query("SELECT p FROM Person p WHERE p.war_zone = :warZone ORDER BY p.lastname")
+    List<Person> findPersonByWar_zone(@Param("warZone") boolean war_zone
+    );
+
+    List<Person> findPersonByState(String state);
 //
-//    List<Person> findPersonByRefugee(boolean refugee);
-//
-//    @Query("SELECT p FROM Person p WHERE p.vocation = true AND p.refugee = true")
-//    List<Person> findPersonByRefugeeAndVocation();
+//    @Query("SELECT p FROM Person p WHERE p.vacation = true AND p.refugee = true")
+//    List<Person> findPersonByRefugeeAndVacation();
 
 //    @Query("SELECT p FROM Person p WHERE p.phone IS NOT NUll ORDER BY p.lastname DESC")
 //    List<Person> findAllrevers();

@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 @SpringBootApplication(scanBasePackages = "ua.ukrposhta.person_location")
 @EnableJpaRepositories
@@ -33,8 +35,8 @@ public class PersonLocationApplication
 	protected String[] getServletMappings() {
 		return new String[]{
 				"","/",
-				"/person-location-data/",
-				"/person-location-data"
+				"/person-location-data-filter/",
+				"/person-location-data-filter"
 		};
 	}
 
@@ -43,4 +45,16 @@ public class PersonLocationApplication
 		return new RestTemplate();
 	}
 
+	@Bean
+	public ClassLoaderTemplateResolver secondaryTemplateResolver() {
+		ClassLoaderTemplateResolver secondaryTemplateResolver = new ClassLoaderTemplateResolver();
+		secondaryTemplateResolver.setPrefix("templates/");
+		secondaryTemplateResolver.setSuffix(".html");
+		secondaryTemplateResolver.setTemplateMode(TemplateMode.HTML);
+		secondaryTemplateResolver.setCharacterEncoding("UTF-8");
+		secondaryTemplateResolver.setOrder(1);
+		secondaryTemplateResolver.setCheckExistence(true);
+
+		return secondaryTemplateResolver;
+	}
 }

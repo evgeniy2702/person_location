@@ -2,6 +2,7 @@ package ua.ukrposhta.person_location.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ua.ukrposhta.person_location.Service.PersonService;
@@ -10,10 +11,13 @@ import ua.ukrposhta.person_location.model.Person;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping({"/","/person-location-data/","/person-location-data"})
+@RequestMapping({"/","/person-location-data-filter/","/person-location-data-filter"})
 public class PersonController {
 
     private PersonService personService;
@@ -23,21 +27,14 @@ public class PersonController {
         this.personService = personService;
     }
 
-//    private Geocoder geocoder;
-//
-//    @Autowired
-//    public void setGeocoder(Geocoder geocoder) {
-//        this.geocoder = geocoder;
-//    }
-
 
     @GetMapping({"","current-date"})
     public ModelAndView startPage(ModelAndView modelAndView){
 
         addInModelAndView(modelAndView,
                 personService.findAll(),
-                "",
-                personService.allDirectorateName());
+                1L,20L,"",
+                personService.allDirectorateName(), null);
 
         return modelAndView;
     }
@@ -46,7 +43,10 @@ public class PersonController {
     public ModelAndView listPersonByLastName(@RequestParam(name = "name", required = false) String partLastname,
                                              ModelAndView modelAndView){
 
-        addInModelAndView(modelAndView,personService.findPersonByLastname(partLastname),"",personService.allDirectorateName());
+
+        addInModelAndView(modelAndView,personService.findPersonByLastname(partLastname),
+                1L,20L,"",
+                personService.allDirectorateName(), Collections.singletonList("за прізвищем"));
         return modelAndView;
     }
 
@@ -56,7 +56,9 @@ public class PersonController {
 
         List<Person> person = personService.personByPhone(phone);
 
-        addInModelAndView(modelAndView,person,"",personService.allDirectorateName());
+        addInModelAndView(modelAndView,person,1L,20L,"",
+                personService.allDirectorateName(),
+                Collections.singletonList("за номером телефону"));
 
         return modelAndView;
     }
@@ -68,7 +70,8 @@ public class PersonController {
         LocalDateTime dateStart = LocalDateTime.parse(date + "T00:00:00.00000");
         LocalDateTime dateEnd = LocalDateTime.parse(date + "T23:59:59.99999");
 
-        addInModelAndView(modelAndView,personService.findPersonByLastModified(dateStart, dateEnd),date,personService.allDirectorateName());
+        addInModelAndView(modelAndView,personService.findPersonByLastModified(dateStart, dateEnd),1L,20L,
+                date,personService.allDirectorateName(), Collections.singletonList(" за датою " + date));
 
         return modelAndView;
     }
@@ -79,14 +82,35 @@ public class PersonController {
 
         addInModelAndView(modelAndView,
                 personService.personListByDirectorate(directorate),
-                "",
-                personService.allDirectorateName());
+                1L,20L,"",
+                personService.allDirectorateName(), Collections.singletonList(" за департаментом " + directorate));
 
         return modelAndView;
     }
 
+    @PostMapping("refugee-vacation-dangerous-region")
+    public ModelAndView filter(@RequestParam(name = "vacation", required = false) boolean vacation,
+                               @RequestParam(name = "refugee", required = false) boolean refugee,
+                               @RequestParam(name = "able_for_work", required = false) boolean able_for_work,
+                               @RequestParam(name = "work_remote", required = false) boolean work_remote,
+                               @RequestParam(name = "work_by_place", required = false) boolean work_by_place,
+                               @RequestParam(name = "war_zone", required = false) boolean war_zone,
+                               @RequestParam(name = "region", required = false) String region,
+                               ModelAndView modelAndView
+                               ){
+        List<Person> personList = null;
 
-    private void addInModelAndView(ModelAndView modelAndView, List<Person> personList, String date, List<String> directorateList) {
+        personList = createFiltering( personList, vacation, refugee, able_for_work,
+                work_remote, work_by_place, war_zone, region);
+
+        addInModelAndView(modelAndView,personList,1L,20L,"",personService.allDirectorateName(),
+                createListFilterParam(vacation, refugee, able_for_work, work_remote, work_by_place, war_zone, region));
+
+        return modelAndView;
+    }
+
+    private void addInModelAndView(ModelAndView modelAndView, List<Person> personList, Long start, Long end,
+                                   String date, List<String> directorateList, List<String> filterParams) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E, dd MMM yyyy");
 
@@ -95,15 +119,6 @@ public class PersonController {
         else
             date = LocalDate.parse(date).format(formatter);
 
-        for (Person person : personList) {
-
-            String YOUR_API_KEY = "AIzaSyCsFXx-hAhNheMt_16U1EABV8eqXmc38_s";
-            String linkGoogleMap ="https://www.google.com/maps/embed/v1/place?key=" + YOUR_API_KEY + "&q=" + person.getGeolocation()
-                    + "&center=" + person.getGeolocation() + "&zoom=10&maptype=roadmap&language=ru";
-
-            person.setLink_geolocation(linkGoogleMap);
-
-        }
         if(directorateList.isEmpty()){
             modelAndView.addObject("emptyDirectorateList", true);
         } else {
@@ -111,10 +126,120 @@ public class PersonController {
             modelAndView.addObject("emptyDirectorateList", false);
         }
 
+        modelAndView.addObject("start" , start);
+        modelAndView.addObject("end", end);
+        modelAndView.addObject("state_list",personService.allStatesList());
+        modelAndView.addObject("filter_params", filterParams);
         modelAndView.addObject("persons", personList);
         modelAndView.addObject("date", date);
         modelAndView.setViewName("index");
 
+    }
+
+    private List<Person> createFiltering(List<Person> personList, boolean vacation, boolean refugee,
+                                         boolean able_for_work, boolean work_remote, boolean work_by_place,
+                                         boolean war_zone, String region) {
+
+        if (vacation)
+            personList = personService.findPersonByVacation(vacation);
+
+        if (refugee)
+            if (personList != null) {
+                personList = personList.stream().filter(person -> person.isRefugee() == refugee).collect(Collectors.toList());
+            } else {
+                personList = personService.findPersonByRefugee(refugee);
+            }
+
+        if (able_for_work)
+            if (personList != null) {
+                personList = personList.stream().filter(person -> person.isAble_for_work() == able_for_work).collect(Collectors.toList());
+            } else {
+                personList = personService.findPersonByAbleForWork(able_for_work);
+            }
+
+        if (work_remote)
+            if (personList != null) {
+                personList = personList.stream().filter(person -> person.isWork_remote() == work_remote).collect(Collectors.toList());
+            } else {
+                personList = personService.findPersonByWorkRemote(work_remote);
+            }
+
+        if (work_by_place)
+            if (personList != null) {
+                personList = personList.stream().filter(person -> person.isWork_by_place() == work_by_place).collect(Collectors.toList());
+            } else {
+                personList = personService.findPersonByWorkByPlace(work_by_place);
+            }
+
+        if (war_zone)
+            if (personList != null) {
+                personList = personList.stream().filter(person -> person.isWar_zone() == war_zone).collect(Collectors.toList());
+            } else {
+                personList = personService.findPersonByWarZone(war_zone);
+            }
+
+        if (!region.isEmpty() ||
+                !region.equalsIgnoreCase(""))
+
+            if (personList != null) {
+                personList = personList.stream().filter(person -> person.getState().equalsIgnoreCase(region)).collect(Collectors.toList());
+            } else {
+                personList = personService.findPersonByState(region);
+            }
+
+        return personList;
+    }
+
+
+    private List<String> createListFilterParam(boolean vacation, boolean refugee,
+                                               boolean able_for_work, boolean work_remote, boolean work_by_place,
+                                               boolean war_zone, String region){
+
+        List<String> filterParams = new ArrayList<>();
+        if(vacation) {
+            filterParams.add("Відпустка : так;");
+        } else {
+            filterParams.add("Відпустка : ні;");
+        }
+
+        if(refugee) {
+            filterParams.add("Біженець : так;");
+        } else {
+            filterParams.add("Біженець : так;");
+        }
+
+        if(able_for_work) {
+            filterParams.add("Може працювати : так;");
+        } else {
+            filterParams.add("Може працювати : ні;");
+        }
+
+        if(work_remote) {
+            filterParams.add("Віддаленно : так;");
+        } else {
+            filterParams.add("Віддаленно : ні;");
+        }
+
+        if(work_by_place) {
+            filterParams.add("За місцем роботи : так;");
+        } else {
+            filterParams.add("За місцем роботи : так;");
+        }
+
+        if(war_zone) {
+            filterParams.add("Зона бойових дій : так;");
+        } else {
+            filterParams.add("Зона бойвих дій : ні;");
+        }
+
+        if(! region.isEmpty() ||
+                !region.equalsIgnoreCase("")) {
+
+            filterParams.add("Регіон : " + region + ";");
+        }
+
+
+        return filterParams;
     }
 
 }
