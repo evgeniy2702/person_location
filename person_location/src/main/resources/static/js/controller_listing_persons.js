@@ -20,8 +20,11 @@ if(person_list.length <= end)
     buttonPlus.setAttribute("style" , "pointer-events: none;");
 
 buttonPlus.onclick = function () {
-    start += 2;
-    end += 2;
+    start += 20;
+    end += 20;
+
+    if(end > person_list.length)
+        end = person_list.length - 1;
 
     console.log(start + " / " + end);
 
@@ -137,6 +140,9 @@ buttonPlus.onclick = function () {
         }
 
     }
+
+    end = start + 19;
+
     if (end >= person_list.length - 1){
 
         buttonPlus.setAttribute("style" , "pointer-events: none;");
@@ -191,8 +197,8 @@ buttonPlus.onclick = function () {
 
 buttonMinus.onclick = function () {
 
-    start -= 2;
-    end -= 2;
+    start -= 20;
+    end -= 20;
 
     console.log(start + " / " + end);
 

@@ -16,12 +16,21 @@ inputRegion.addEventListener("keydown", (event) => {
 
         for (let i = 0; i < regions.length; i++) {
             console.log(region);
-            console.log(regions[i].split(" ")[1].substring(0, region.length).toLowerCase());
-            console.log(regions[i].split(" ")[1].substring(0, region.length).toLowerCase() === region.toLowerCase() );
-            if (regions[i].substring(0, (region.length)).toLowerCase() === region.toLowerCase() ||
-                regions[i].split(" ")[1].substring(0, region.length).toLowerCase() === region.toLowerCase()) {
 
-                createStateList.push(regions[i]);
+            let arrayString = regions[i].split(" ");
+
+            if(arrayString.length >= 2) {
+                if (regions[i].substring(0, (region.length)).toLowerCase() === region.toLowerCase() ||
+                    regions[i].split(" ")[1].substring(0, region.length).toLowerCase() === region.toLowerCase()) {
+
+                    createStateList.push(regions[i]);
+                }
+            } else {
+                if (regions[i].substring(0, (region.length)).toLowerCase() === region.toLowerCase()){
+
+                    createStateList.push(regions[i]);
+
+                }
             }
         }
 

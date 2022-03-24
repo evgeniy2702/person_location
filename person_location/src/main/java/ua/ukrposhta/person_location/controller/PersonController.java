@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ua.ukrposhta.person_location.Service.PersonService;
 import ua.ukrposhta.person_location.model.Person;
+import ua.ukrposhta.person_location.utils.ConsoleLogger;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 @RequestMapping({"/","/person-location-data-filter/","/person-location-data-filter"})
 public class PersonController {
 
+    private ConsoleLogger logger = ConsoleLogger.getInstance();
     private PersonService personService;
 
     @Autowired
@@ -30,6 +32,8 @@ public class PersonController {
 
     @GetMapping({"","current-date"})
     public ModelAndView startPage(ModelAndView modelAndView){
+
+        logger.info("Start startPage method in PersonController.class");
 
         addInModelAndView(modelAndView,
                 personService.findAll(),
@@ -43,6 +47,7 @@ public class PersonController {
     public ModelAndView listPersonByLastName(@RequestParam(name = "name", required = false) String partLastname,
                                              ModelAndView modelAndView){
 
+        logger.info("Start listPersonByLastName method in PersonController.class");
 
         addInModelAndView(modelAndView,personService.findPersonByLastname(partLastname),
                 1L,20L,"",
@@ -53,6 +58,9 @@ public class PersonController {
     @PostMapping("person-list/by-phone")
     public ModelAndView personByPhone(@RequestParam(name = "phone", required = false) String phone,
                                 ModelAndView modelAndView){
+
+        logger.info("Start personByPhone method in PersonController.class");
+
 
         List<Person> person = personService.personByPhone(phone);
 
@@ -67,6 +75,8 @@ public class PersonController {
     public ModelAndView personByDate(@RequestParam(name = "date", required = false) String date,
                                       ModelAndView modelAndView){
 
+        logger.info("Start personByDate method in PersonController.class");
+
         LocalDateTime dateStart = LocalDateTime.parse(date + "T00:00:00.00000");
         LocalDateTime dateEnd = LocalDateTime.parse(date + "T23:59:59.99999");
 
@@ -79,6 +89,8 @@ public class PersonController {
     @GetMapping("person-list/directorate/{directorate}")
     public ModelAndView listAllDirectorateName(@PathVariable(value = "directorate", required = false) String directorate,
                                                ModelAndView modelAndView){
+
+        logger.info("Start listAllDirectorateName method in PersonController.class");
 
         addInModelAndView(modelAndView,
                 personService.personListByDirectorate(directorate),
@@ -98,6 +110,9 @@ public class PersonController {
                                @RequestParam(name = "region", required = false) String region,
                                ModelAndView modelAndView
                                ){
+
+        logger.info("Start filter method in PersonController.class");
+
         List<Person> personList = null;
 
         personList = createFiltering( personList, vacation, refugee, able_for_work,
@@ -111,6 +126,8 @@ public class PersonController {
 
     private void addInModelAndView(ModelAndView modelAndView, List<Person> personList, Long start, Long end,
                                    String date, List<String> directorateList, List<String> filterParams) {
+
+        logger.info("Start addInModelAndView method in PersonController.class");
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E, dd MMM yyyy");
 
@@ -140,6 +157,8 @@ public class PersonController {
                                          boolean able_for_work, boolean work_remote, boolean work_by_place,
                                          boolean war_zone, String region) {
 
+        logger.info("Start createFiltering method for filter info about persons in PersonController.class");
+
         if (vacation)
             personList = personService.findPersonByVacation(vacation);
 
@@ -153,6 +172,12 @@ public class PersonController {
         if (able_for_work)
             if (personList != null) {
                 personList = personList.stream().filter(person -> person.isAble_for_work() == able_for_work).collect(Collectors.toList());
+                if (work_remote)
+                    personList = personList.stream().filter(person -> person.isWork_remote() == work_remote).collect(Collectors.toList());
+
+                if (work_by_place)
+                    personList = personList.stream().filter(person -> person.isWork_by_place() == work_by_place).collect(Collectors.toList());
+
             } else {
                 personList = personService.findPersonByAbleForWork(able_for_work);
             }
@@ -195,6 +220,8 @@ public class PersonController {
                                                boolean able_for_work, boolean work_remote, boolean work_by_place,
                                                boolean war_zone, String region){
 
+        logger.info("Start createListFilterParam method for show filter params on tje index.html page in PersonController.class");
+
         List<String> filterParams = new ArrayList<>();
         if(vacation) {
             filterParams.add("Відпустка : так;");
@@ -205,7 +232,7 @@ public class PersonController {
         if(refugee) {
             filterParams.add("Біженець : так;");
         } else {
-            filterParams.add("Біженець : так;");
+            filterParams.add("Біженець : ні;");
         }
 
         if(able_for_work) {
@@ -223,7 +250,7 @@ public class PersonController {
         if(work_by_place) {
             filterParams.add("За місцем роботи : так;");
         } else {
-            filterParams.add("За місцем роботи : так;");
+            filterParams.add("За місцем роботи : ні;");
         }
 
         if(war_zone) {
