@@ -6,11 +6,9 @@
           th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js}" >
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css}" >
-    <link rel="stylesheet" type="text/css" th:href="@{/menu_var.css}" >
-    <!--<link rel="stylesheet" type="text/css" th:href="@{/menu.css}" >-->
+    <link rel="stylesheet" type="text/css" th:href="@{/menu.css}" >
     <link rel="stylesheet" type="text/css" th:href="@{/modal.css}" >
     <link rel="stylesheet" type="text/css" th:href="@{/logo.css}" >
-    <link rel="stylesheet" type="text/css" th:href="@{/rounded.css}" >
 </head>
 <body >
 
@@ -26,9 +24,9 @@
     </h5>
     <div class="card border-dark my-4"  >
 
-        <div id="input" class=" menu" style="background: yellow;"> <!--card-body-->
-            <nav class="menu_var">
-                <ul class="topmenu" >
+        <div id="input" class="card-body menu" style="background: yellow;">
+            <nav>
+                <ul class="topmenu">
                     <li>
                         <!-- Триггер / Открыть Модальный -->
                         <a id="btnLastname" href="#modalLastname">Пошук по прізвищу</a>
@@ -74,6 +72,20 @@
                                 </form>
                             </div>
                         </div>
+                    </li>
+                    <li ><a th:href="@{~/person-location-data-filter/current-date}" class="down" >Пошук по назві департаменту</a>
+                        <ul class="submenu"  th:if="${emptyDirectorateList}" th:hidden="${emptyDirectorateList}">
+                            <li  th:each="directorate : ${unitList}"  >
+                                <a th:href="@{~/person-location-data-filter/person-list/directorate/{directorate}(directorate = ${directorate})}"
+                                   th:text="${directorate}" ></a>
+                            </li>
+                        </ul>
+                        <ul class="submenu"  th:if="${!emptyDirectorateList}" th:hidden="${emptyDirectorateList}">
+                            <li th:each="directorate : ${unitList}"  >
+                                <a th:href="@{~/person-location-data-filter/person-list/directorate/{directorate}(directorate = ${directorate})}"
+                                   th:text="${directorate}" ></a>
+                            </li>
+                        </ul>
                     </li>
                     <li >
                         <!-- Триггер / Открыть Модальный -->
@@ -190,32 +202,12 @@
                             </div>
                         </div>
                     </li>
-                    <li ><a th:href="@{~/person-location-data-filter/current-date}" class="down" >Пошук по назві департаменту</a>
-                        <ol class="rounded"  th:if="${emptyDirectorateList}" th:hidden="${emptyDirectorateList}">
-                            <li  th:each="directorate : ${unitList}"  >
-                                <a th:href="@{~/person-location-data-filter/person-list/directorate/{directorate}(directorate = ${directorate})}"
-                                   th:text="${directorate}" ></a>
-                            </li>
-                        </ol>
-                        <ol class="rounded"  th:if="${!emptyDirectorateList}" th:hidden="${emptyDirectorateList}">
-                            <li th:each="directorate : ${unitList}"  >
-                                <a th:href="@{~/person-location-data-filter/person-list/directorate/{directorate}(directorate = ${directorate})}"
-                                   th:text="${directorate}" ></a>
-                            </li>
-                        </ol>
-                    </li>
                 </ul>
             </nav>
         </div>
-        <div id="header" class="card-footer text-center " style="background-color: gold;" >
-
-            <a  class="btn btn-outline-success buttonMinus" href="#"  th:style = "${start == 1 } ? 'pointer-events: none;' : ''" > - 20 </a>
-
+        <div class="card-footer text-center" style="background-color: gold;" >
             <a class="btn btn-info" th:href="@{~/person-location-data-filter/current-date}">Відомості станом на поточну дату !</a>
-            <a th:id="pageBottom" class="btn btn-secondary" style="color: white;" >В кінець сторінки</a>
-
-            <a  class="btn btn btn-outline-success buttonPlus" href="#" th:style="${end} >= ${persons.size()} ? 'pointer-events: none;' : ''" > + 20 </a>
-
+            <a id="pageBottom" href="#" class="btn btn-secondary"  >В кінець сторінки</a>
         </div>
     </div>
 </div>
@@ -364,11 +356,11 @@
     <div id="footer" class="card-footer text-center">
 
 
-        <a  class="btn btn-outline-success buttonMinus" href="#"  th:style = "${start == 1 } ? 'pointer-events: none;' : ''" > - 20 </a>
+        <a th:id="buttonMinus" class="btn btn-outline-success" href="#"  th:style = "${start == 1 } ? 'pointer-events: none;' : ''" > - 20 </a>
 
         <a id="pageTop" href="#" class="btn btn-secondary"  >На початок сторінки</a>
 
-        <a  class="btn btn btn-outline-success buttonPlus" href="#" th:style="${end} >= ${persons.size()} ? 'pointer-events: none;' : ''" > + 20 </a>
+        <a th:id="buttonPlus" class="btn btn btn-outline-success" href="#" th:style="${end} >= ${persons.size()} ? 'pointer-events: none;' : ''" > + 20 </a>
 
 
 

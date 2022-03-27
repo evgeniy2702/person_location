@@ -38,6 +38,8 @@ public class Person {
     private boolean work_remote;
     private boolean able_for_work;
     private String user_messenger_id;
+    private boolean not_provided_geo_too_long;
+    private boolean on_occupied_territory;
 
 
 }

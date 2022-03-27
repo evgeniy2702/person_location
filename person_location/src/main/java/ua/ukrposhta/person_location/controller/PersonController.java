@@ -2,10 +2,9 @@ package ua.ukrposhta.person_location.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import ua.ukrposhta.person_location.Service.PersonService;
+import ua.ukrposhta.person_location.service.PersonService;
 import ua.ukrposhta.person_location.model.Person;
 import ua.ukrposhta.person_location.utils.ConsoleLogger;
 
@@ -147,6 +146,8 @@ public class PersonController {
         modelAndView.addObject("end", end);
         modelAndView.addObject("state_list",personService.allStatesList());
         modelAndView.addObject("filter_params", filterParams);
+        if(filterParams != null)
+            modelAndView.addObject("caption", "Застосовано наступний фільтр : ");
         modelAndView.addObject("persons", personList);
         modelAndView.addObject("date", date);
         modelAndView.setViewName("index");
@@ -224,45 +225,45 @@ public class PersonController {
 
         List<String> filterParams = new ArrayList<>();
         if(vacation) {
-            filterParams.add("Відпустка : так;");
+            filterParams.add("Відпустка : так");
         } else {
-            filterParams.add("Відпустка : ні;");
+            filterParams.add("Відпустка : ні");
         }
 
         if(refugee) {
-            filterParams.add("Біженець : так;");
+            filterParams.add("Біженець : так");
         } else {
-            filterParams.add("Біженець : ні;");
+            filterParams.add("Біженець : ні");
         }
 
         if(able_for_work) {
-            filterParams.add("Може працювати : так;");
+            filterParams.add("Може працювати : так");
         } else {
-            filterParams.add("Може працювати : ні;");
+            filterParams.add("Може працювати : ні");
         }
 
         if(work_remote) {
-            filterParams.add("Віддаленно : так;");
+            filterParams.add("Віддаленно : так");
         } else {
-            filterParams.add("Віддаленно : ні;");
+            filterParams.add("Віддаленно : ні");
         }
 
         if(work_by_place) {
-            filterParams.add("За місцем роботи : так;");
+            filterParams.add("За місцем роботи : так");
         } else {
             filterParams.add("За місцем роботи : ні;");
         }
 
         if(war_zone) {
-            filterParams.add("Зона бойових дій : так;");
+            filterParams.add("Зона бойових дій : так");
         } else {
-            filterParams.add("Зона бойвих дій : ні;");
+            filterParams.add("Зона бойвих дій : ні");
         }
 
         if(! region.isEmpty() ||
                 !region.equalsIgnoreCase("")) {
 
-            filterParams.add("Регіон : " + region + ";");
+            filterParams.add("Регіон : " + region);
         }
 
 

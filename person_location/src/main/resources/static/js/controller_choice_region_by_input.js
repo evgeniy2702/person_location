@@ -41,13 +41,15 @@ inputRegion.addEventListener("keydown", (event) => {
             if(count <= 3) {
                 stringHTML += "<p style='border: 1px solid black; border-top-color: black; " +
                     "border-right-color: black; border-bottom-color: black; border-left-color: black; " +
-                    "border-color: gainsboro; width: 26%; margin-left: 37%; margin-bottom: 0' >" + elem + "</p>";
+                    "border-color: gainsboro; width: 52.5%; margin-left: 24%; margin-bottom: 0' >" + elem + "</p>";
             }
         }
         detachWhenLengthPNull();
         if (stringHTML !== "") {
 
             div.innerHTML = stringHTML;
+            div.setAttribute("display", "initial");
+            div.setAttribute("text-align", "center");
             divRegions.appendChild(div);
             stringHTML = "";
         }

@@ -1,4 +1,4 @@
-package ua.ukrposhta.person_location.Service;
+package ua.ukrposhta.person_location.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -28,6 +28,7 @@ public class PersonService {
     private PersonRepo personRepo;
     private Geocoder geocoder;
     private ConsoleLogger logger = ConsoleLogger.getInstance();
+    private String YOUR_API_KEY = "AIzaSyCsFXx-hAhNheMt_16U1EABV8eqXmc38_s";
 
     @Autowired
     public void setGeocoder(Geocoder geocoder) {
@@ -129,7 +130,7 @@ public class PersonService {
     }
 
     // update data_table data in column text_location every hour if change geolocation data
-    @Scheduled(cron = "0 0 * ? * *")
+    @Scheduled(cron = "0 30 * ? * *")
     public void updateGeolocationData(){
         log.info("update geolocation data");
         logger.info("Update geolocation data in db if change by scheduled cron  = " + cron_data + " / updateGeolocationData method PersonService.class");
@@ -147,13 +148,24 @@ public class PersonService {
 
                 } catch (Exception e ) {
 
-                    logger.error("ERROR : " + Arrays.toString(e.getStackTrace()));
+                    logger.error("ERROR in geocoderSetUp method PersonService.class in identify the GEO string : " + Arrays.toString(e.getStackTrace()));
                     System.out.println(Arrays.toString(e.getStackTrace()));
-                    e.getStackTrace();
+
+                    String  state = "Місце знаходження визначити не вдалося. Перевірте координати.";
+
+                    person.setText_location(state);
+
+                    person.setState(state);
+
+                    person.setLink_geolocation("https://www.google.com/maps/embed/v1/place?key=" + YOUR_API_KEY + "&q=" + person.getGeolocation()
+                            + "&center=" + person.getGeolocation() + "&zoom=10&maptype=roadmap&language=ru");
+
+                    this.updatePerson(person);
 
                 }
             }
 
+            logger.info("------- End to identify of geolocation-------");
 
     }
 
@@ -171,7 +183,6 @@ public class PersonService {
             String lat = person.getGeolocation().split(",")[0];
             String lon = person.getGeolocation().split(",")[1];
 
-            String YOUR_API_KEY = "AIzaSyCsFXx-hAhNheMt_16U1EABV8eqXmc38_s";
             String linkGoogleMap ="https://www.google.com/maps/embed/v1/place?key=" + YOUR_API_KEY + "&q=" + person.getGeolocation()
                     + "&center=" + person.getGeolocation() + "&zoom=10&maptype=roadmap&language=ru";
 
@@ -210,7 +221,7 @@ public class PersonService {
 
                 } else if (json.keySet().contains("city")) {
 
-                    state = "м." + json.getString("city");
+                    state = json.getString("city");
 
                     System.out.println("---------------------------------------------");
                     System.out.println("city " + state);
@@ -291,6 +302,9 @@ public class PersonService {
             } else {
 
                 person.setText_location(person.getGeolocation());
+                person.setState("Місце знаходження визначити не вдалося. Перевірте координати.");
+                person.setLink_geolocation("https://www.google.com/maps/embed/v1/place?key=" + YOUR_API_KEY + "&q=" + person.getGeolocation()
+                        + "&center=" + person.getGeolocation() + "&zoom=10&maptype=roadmap&language=ru");
 
                 this.updatePerson(person);
 

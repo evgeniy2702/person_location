@@ -17,7 +17,8 @@ body:before {
 }
 nav {
     text-align: center;
-    font-size: small;
+    /*font-size: small;*/
+    color: black;
 }
 nav ul {
     list-style: none;
@@ -56,9 +57,9 @@ nav a {
     transition: .3s;
 }
 .topmenu li:hover a:before {
-    transform: translate(-50%, 0);
-    opacity: 1;
-}
+     transform: translate(-50%, 0);
+     opacity: 1;
+ }
 .submenu {
     position: absolute;
     z-index: 4;
