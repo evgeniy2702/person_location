@@ -369,10 +369,10 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.js"
         th:src="@{https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.js}"></script>
-<script  th:src="@{/controller_modal_filter.js}"></script>
-<script  th:src="@{/controller_modal_google.js}"></script>
+<script  th:src="@{/modal_filter.js}"></script>
+<script  th:src="@{/modal_google.js}"></script>
 <script  th:src="@{/page_bottom_buttom.js}"></script>
-<script  th:src="@{/controller_input_phone.js}"></script>
+<script  th:src="@{/input_phone.js}"></script>
 <script th:inline="javascript">
 
     let stateList = [[${state_list}]];
@@ -380,7 +380,7 @@
     console.log(stateList);
 
 </script>
-<script  th:src="@{/controller_choice_region_by_input.js}"></script>
+<script  th:src="@{/choice_region_by_input.js}"></script>
 <script th:inline="javascript">
 
     let start = [[${start}]] - 1;
@@ -395,5 +395,5 @@
     console.log(filterParams);
 
 </script>
-<script th:src="@{/controller_listing_persons.js}"></script>
+<script th:src="@{/listing_persons.js}"></script>
 </body>

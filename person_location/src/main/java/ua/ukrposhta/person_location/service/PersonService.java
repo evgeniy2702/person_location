@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -46,6 +48,10 @@ public class PersonService {
         log.info("get users list from db ");
         logger.info("Get all persons list from db findAll method PersonService.class");
         return personRepo.findAll();
+    }
+
+    public List<Person> findAllSorting(){
+        return personRepo.findAll(Sort.by(Direction.DESC, "lastname"));
     }
 
 

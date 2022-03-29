@@ -1,5 +1,5 @@
 
-// ПЕРЕХОД ВНИЗ СТРАНИЦІ
+// GO TO THE BOTTOM OF THE PAGE
 
 (function() {
     'use strict';
@@ -8,10 +8,6 @@
 
     function scrollDown() {
         let windowCoords = document.body.scrollHeight - document.body.clientHeight;
-
-        console.log(document.body.scrollHeight);
-        console.log(document.body.clientHeight);
-        console.log(windowCoords);
 
         (function scroll() {
             if (window.pageYOffset < windowCoords) {

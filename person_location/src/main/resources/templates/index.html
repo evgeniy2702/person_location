@@ -1,6 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Person_Location_Ukrposhta</title>
     <link src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"
           th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js}" >
@@ -24,9 +26,9 @@
     <h5 class="text-center" style="color: brown;" >
         Всього кількість співробітників : <b th:text="${persons.size()}"></b> .
     </h5>
-    <div class="card border-dark my-4"  >
+    <div class="card border-0 my-4"  >
 
-        <div id="input" class=" menu" style="background: yellow;"> <!--card-body-->
+        <div id="input" class="menu_var card border-dark" style="background: yellow;"> <!--card-body-->
             <nav class="menu_var">
                 <ul class="topmenu" >
                     <li>
@@ -207,16 +209,21 @@
                 </ul>
             </nav>
         </div>
-        <div id="header" class="card-footer text-center " style="background-color: gold;" >
+        <div id="header" class="card-header border-0 text-center " style="background-color: white;" >
 
-            <a  class="btn btn-outline-success buttonMinus" href="#"  th:style = "${start == 1 } ? 'pointer-events: none;' : ''" > - 20 </a>
+            <a th:id="buttonTopMinus" class="btn btn-outline-success buttonMinus" href="#"
+               th:style = "${start == 1 } ? 'pointer-events: none;' : ''"
+            > - 20 </a>
 
             <a class="btn btn-info" th:href="@{~/person-location-data-filter/current-date}">Відомості станом на поточну дату !</a>
             <a th:id="pageBottom" class="btn btn-secondary" style="color: white;" >В кінець сторінки</a>
 
-            <a  class="btn btn btn-outline-success buttonPlus" href="#" th:style="${end} >= ${persons.size()} ? 'pointer-events: none;' : ''" > + 20 </a>
+            <a th:id="buttonTopPlus" class="btn btn btn-outline-success buttonPlus" href="#"
+               th:style="${end} >= ${persons.size()} ? 'pointer-events: none;' : ''"
+            > + 20 </a>
 
         </div>
+
     </div>
 </div>
 
@@ -242,8 +249,11 @@
     </div>
 </div>
 
-<!-- TABLE INFO ABOUT PERSONS -->
+<!-- TABLE INFO ABOUT PERSONS + FOOTER -->
 <div class="container pb-3 pt-3" style="font-size: small">
+
+    <!-- TABLE INFO -->
+
     <div class="row">
         <div class="col-md-20">
             <div class="panel panel-default">
@@ -259,6 +269,11 @@
                             <th id="add_date" scope="col">Дата додавання</th>
                             <th id="location" scope="col" >Геолокація</th>
                             <th id="date_update_location" scope="col">Дата оновлення геолокаії</th>
+                        </tr>
+                        <tr>
+                            <th><a id="asc" class="btn btn-outline-info" style="font-size: xx-small; pointer-events: none;" href="#" >A-Z🔼</a>
+                                <a id="desc" class="btn btn-outline-info" style="font-size: xx-small;" href="#" >Z-A🔽</a></th>
+                            <th colspan="7"></th>
                         </tr>
                         </thead>
                         <tbody id="main" class="text-center" >
@@ -361,14 +376,17 @@
             </div>
         </div>
     </div>
+
+    <!-- FOOTER -->
+
     <div id="footer" class="card-footer text-center">
 
 
-        <a  class="btn btn-outline-success buttonMinus" href="#"  th:style = "${start == 1 } ? 'pointer-events: none;' : ''" > - 20 </a>
+        <a th:id="buttonBottomMinus" class="btn btn-outline-success buttonMinus" href="#"  th:style = "${start == 1 } ? 'pointer-events: none;' : ''" > - 20 </a>
 
         <a id="pageTop" href="#" class="btn btn-secondary"  >На початок сторінки</a>
 
-        <a  class="btn btn btn-outline-success buttonPlus" href="#" th:style="${end} >= ${persons.size()} ? 'pointer-events: none;' : ''" > + 20 </a>
+        <a th:id="buttonBottomPlus" class="btn btn btn-outline-success buttonPlus" href="#" th:style="${end} >= ${persons.size()} ? 'pointer-events: none;' : ''" > + 20 </a>
 
 
 
@@ -377,10 +395,10 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.js"
         th:src="@{https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.js}"></script>
-<script  th:src="@{/controller_modal_filter.js}"></script>
-<script  th:src="@{/controller_modal_google.js}"></script>
+<script  th:src="@{/modal_filter.js}"></script>
+<script  th:src="@{/modal_google.js}"></script>
 <script  th:src="@{/page_bottom_buttom.js}"></script>
-<script  th:src="@{/controller_input_phone.js}"></script>
+<script  th:src="@{/input_phone.js}"></script>
 <script th:inline="javascript">
 
     let stateList = [[${state_list}]];
@@ -388,7 +406,7 @@
     console.log(stateList);
 
 </script>
-<script  th:src="@{/controller_choice_region_by_input.js}"></script>
+<script  th:src="@{/choice_region_by_input.js}"></script>
 <script th:inline="javascript">
 
     let start = [[${start}]] - 1;
@@ -403,5 +421,7 @@
     console.log(filterParams);
 
 </script>
-<script th:src="@{/controller_listing_persons.js}"></script>
+<script th:src="@{/listing_persons.js}"></script>
+<script th:src="@{/sort_revers.js}"></script>
+<script th:src="@{/sort_straight.js}"></script>
 </body>
