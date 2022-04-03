@@ -1,0 +1,399 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Person_Location_Ukrposhta</title>
+    <link src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"
+          th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js}" >
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css}" >
+    <link rel="stylesheet" type="text/css" th:href="@{/menu.css}" >
+    <link rel="stylesheet" type="text/css" th:href="@{/modal.css}" >
+    <link rel="stylesheet" type="text/css" th:href="@{/logo.css}" >
+</head>
+<body >
+
+<!-- HEADER WITH FILTER-->
+<div class="container ">
+    <img class="logo" src="https://peredplata.ukrposhta.ua/image/catalog/asset2.png">
+    <h4 class="text-center" style="color: brown;">
+        Відомості щодо місця розташування співробітників УКРПОШТА станом на :
+        <span th:text="${date}" style="color: darkblue;"> 26.07.2021</span> <span style="color: darkblue;">р.</span>
+    </h4>
+    <h5 class="text-center" style="color: brown;" >
+        Всього кількість співробітників : <b th:text="${persons.size()}"></b> .
+    </h5>
+    <div class="card border-dark my-4"  >
+
+        <div id="input" class="card-body menu" style="background: yellow;">
+            <nav>
+                <ul class="topmenu">
+                    <li>
+                        <!-- Триггер / Открыть Модальный -->
+                        <a id="btnLastname" href="#modalLastname">Пошук по прізвищу</a>
+
+                        <!-- Модальном окно -->
+                        <div id="modalLastname" class="modal card-header text-center">
+
+                            <!-- Модальное содержание -->
+                            <div class="modal-content">
+                                <span class="close">&times;</span>
+                                <form th:id="linkFormName" th:action="@{~/person-location-data-filter/person-list/by-lastname}"  th:method="post" >
+
+                                    <label for="name" >Введіть прізвище співробітника : </label>
+                                    <input id="name" th:name="name" type="search" placeholder="Котигорошoк"/>
+
+                                    <input type="submit" th:form="linkFormName" value="Відправити" class="btn btn-info" />
+
+                                </form>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <!-- Триггер / Открыть Модальный -->
+                        <a id="btnDate" href="#modalDate">Пошук по даті</a>
+
+                        <!-- Модальном окно -->
+                        <div id="modalDate" class="modal card-header text-center">
+
+                            <!-- Модальное содержание -->
+                            <div class="modal-content date">
+                                <span class="close">&times;</span>
+                                <form th:id="linkFormDate" th:action="@{~/person-location-data-filter/person-list/by-date}"  th:method="post" >
+                                    <div class="text-center">
+                                        <label for="day" >Оберіть дату останньої геолокації : </label>
+                                    </div>
+                                    <div class="text-center">
+                                        <input id="day" class="btn btn-outline-primary" th:name="date" type="date"/>
+                                    </div>
+                                    <div class="text-center">
+                                        <input type="submit" th:form="linkFormDate" value="Відправити" class="btn btn-info" />
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </li>
+                    <li ><a th:href="@{~/person-location-data-filter/current-date}" class="down" >Пошук по назві департаменту</a>
+                        <ul class="submenu"  th:if="${emptyDirectorateList}" th:hidden="${emptyDirectorateList}">
+                            <li  th:each="directorate : ${unitList}"  >
+                                <a th:href="@{~/person-location-data-filter/person-list/directorate/{directorate}(directorate = ${directorate})}"
+                                   th:text="${directorate}" ></a>
+                            </li>
+                        </ul>
+                        <ul class="submenu"  th:if="${!emptyDirectorateList}" th:hidden="${emptyDirectorateList}">
+                            <li th:each="directorate : ${unitList}"  >
+                                <a th:href="@{~/person-location-data-filter/person-list/directorate/{directorate}(directorate = ${directorate})}"
+                                   th:text="${directorate}" ></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li >
+                        <!-- Триггер / Открыть Модальный -->
+                        <a id="btnFilter" href="#modalFilter">Пошук за параметрами</a>
+
+                        <!-- Модальном окно -->
+                        <div id="modalFilter" class="modal card-header text-center">
+
+                            <!-- Модальное содержание -->
+                            <div class="modal-content form_filter">
+                                <span class="close">&times;</span>
+                                <footer>
+                                    <div class="footerBox">
+
+                                        <div class="footerInfoBox " text-center>
+                                            <form th:id="linkFormFilter" th:action="@{~/person-location-data-filter/refugee-vacation-dangerous-region}"  th:method="post">
+                                                <div style="  display: flex; align-content: space-around; justify-content: center;">
+                                                    <div style="width: 50%" >
+                                                        <div style="display: flex; flex-direction: row; flex-wrap: nowrap; margin-left: 10%; width: 80%">
+                                                            <div style="padding-left: 5%; font-size: medium">
+                                                                <label for="vacation" >Відпустка : </label>
+                                                            </div>
+                                                            <div style="padding-left: 5%">
+                                                                <input id="vacation" class="btn btn-outline-primary" th:name="vacation" type="checkbox"/>
+                                                            </div>
+                                                        </div>
+                                                        <div style="display: flex; flex-direction: row; flex-wrap: nowrap; margin-left: 10%; width: 80%">
+                                                            <div style="padding-left: 5%; font-size: medium">
+                                                                <label for="refugee" >Біженець : </label>
+                                                            </div>
+                                                            <div style="padding-left: 5%">
+                                                                <input id="refugee" class="btn btn-outline-primary" th:name="refugee" type="checkbox"/>
+                                                            </div>
+                                                        </div>
+
+                                                        <div style="display: flex; flex-direction: row; flex-wrap: nowrap; margin-left: 10%; width: 80%">
+                                                            <div style="padding-left: 5%; font-size: medium">
+                                                                <label for="able_for_work" >Може працювати : </label>
+                                                            </div>
+                                                            <div style="padding-left: 5%">
+                                                                <input id="able_for_work" class="btn btn-outline-primary" th:name="able_for_work" type="checkbox"/>
+                                                            </div>
+                                                        </div>
+                                                        <div style="display: flex; flex-direction: row; flex-wrap: nowrap; margin-left: 10%; width: 80%">
+                                                            <div style=" width: 90%; margin-left: 5%; display: flex; flex-direction: row; font-size: medium;" >
+                                                                <p for="work" >Працює : </p>
+                                                            </div>
+                                                        </div>
+                                                        <div style="display: flex; flex-direction: row; flex-wrap: nowrap; margin-left: 10%; width: 90%">
+                                                            <div style=" width: 90%; margin-left: 5%; display: flex; flex-direction: row; " >
+                                                                <div  >
+                                                                    <label for="work_remote" >Віддалено : </label>
+                                                                </div>
+                                                                <div style="padding-left: 5%" >
+                                                                    <input id="work_remote" class="btn btn-outline-primary" th:name="work_remote" type="checkbox"/>
+                                                                </div>
+                                                                <div style="padding-left: 5%" >
+                                                                    <label for="work_by_place" >За місцем роботи : </label>
+                                                                </div>
+                                                                <div style="padding-left: 5%">
+                                                                    <input id="work_by_place" class="btn btn-outline-primary" th:name="work_by_place" type="checkbox"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div style="width: 50%" >
+                                                        <div style="display: flex; flex-direction: row; flex-wrap: nowrap; width: 100%; font-size: medium;
+                                                                    text-align: left; ">
+                                                            <div >
+                                                                <label for="war_zone" >Регіон знаходиться в зоні бойових дій : </label>
+                                                            </div>
+                                                            <div style="width: 50%">
+                                                                <input id="war_zone" class="btn btn-outline-primary" th:name="war_zone" type="checkbox"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="text-center" style="font-size: medium;">
+                                                            <label for="region" >Регіон : </label>
+                                                        </div>
+                                                        <div id="regions" class="text-center">
+                                                            <input id="region"  th:name="region" type="search" placeholder="Введіть назву регіона" autocomplete="off"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="text-center">
+                                                    <input type="submit" th:form="linkFormFilter" value="Відправити" class="btn btn-info" />
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </footer>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+
+                        <!-- Триггер / Открыть Модальный -->
+                        <a id="btnPhone" href="#modalPhone">Пошук за номером телефона</a>
+
+                        <!-- Модальном окно -->
+                        <div id="modalPhone" class="modal card-header text-center">
+
+                            <!-- Модальное содержание -->
+                            <div class="modal-content">
+                                <span class="close">&times;</span>
+                                <form th:id="linkFormPhone" th:action="@{~/person-location-data-filter/person-list/by-phone}"  th:method="post" >
+
+                                    <label id="phoneNumber" >Введіть номер телефону співробітника : </label>
+                                    <input id="tel" th:name="phone" type="search"
+                                           placeholder="067-222-22-22" />
+
+                                    <input type="submit" th:form="linkFormPhone" value="Відправити" class="btn btn-info" />
+
+                                </form>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="card-footer text-center" style="background-color: gold;" >
+            <a class="btn btn-info" th:href="@{~/person-location-data-filter/current-date}">Відомості станом на поточну дату !</a>
+            <a id="pageBottom" href="#" class="btn btn-secondary"  >В кінець сторінки</a>
+        </div>
+    </div>
+</div>
+
+<!-- TO SHOW FILTER PARAMS IF FILTER USE-->
+<div class="container bgcont" style="font-size: initial;">
+    <div class="row" style="flex-direction: column-reverse">
+        <div class="col-md-20">
+            <div class="panel panel-default">
+                <div class="position-relative center-block top-cover">
+                    <caption>
+                        <h5 class="text-center" th:text="${caption}"></h5> <!-- Застосовано наступний фільтр : -->
+                    </caption>
+                    <table class="table table-striped table-bordered table-hover" >
+                        <tbody class="text-center" style="color: #84888c;">
+                        <tr class="pl-md-5" scope="row" >
+                            <td th:each="param_item : ${filter_params}" ><span th:text="${param_item}"></span></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- TABLE INFO ABOUT PERSONS -->
+<div class="container pb-3 pt-3" style="font-size: small">
+    <div class="row">
+        <div class="col-md-20">
+            <div class="panel panel-default">
+                <div class="position-relative card border-dark">
+                    <table id="alltable" class="table table-striped table-bordered table-hover"  border="1" >
+                        <thead class="text-center" style="background-color: #E8EBEE">
+                        <tr class="col"  style="background: yellow;">
+                            <th id="lastname" scope="col">Прізвище</th>
+                            <th id="firstname" scope="col">Ім'я</th>
+                            <th id="middle_name" scope="col">По батькові</th>
+                            <th id="unit" scope="col">Департамент</th>
+                            <th id="phone" scope="col">Контактнй телефон</th>
+                            <th id="add_date" scope="col">Дата додавання</th>
+                            <th id="location" scope="col" >Геолокація</th>
+                            <th id="date_update_location" scope="col">Дата оновлення геолокаії</th>
+                        </tr>
+                        </thead>
+                        <tbody id="main" class="text-center" >
+                        <tr th:each="person : ${persons}" th:if="${personStat.count >= start} and ${personStat.count <= end}" class="pl-md-5" scope="row" >
+                            <th class="pl-md-5 th_geolocation" scope="row" >
+
+                                <!-- Триггер / Открыть Модальный -->
+                                <a th:text="${person.getLastname()}"> </a>
+
+                                <!-- Модальном окно -->
+                                <div class="modal card-header div_modal">
+
+                                    <!-- Модальное содержание -->
+                                    <div class="modal-content">
+                                        <span class="close">&times;</span>
+
+                                        <footer>
+                                            <div class="footerBox">
+
+                                                <div class="footerInfoBox ">
+                                                    <div style="display: flex; flex-direction: row; flex-wrap: nowrap;">
+                                                        <div style="margin-right: 5%; width: 30%;"  >
+                                                            <h6 th:text="|У відпусці : |"></h6>
+                                                            <p th:if="${person.isVacation()}" th:text="|так|"></p>
+                                                            <p th:unless="${person.isVacation()}" th:text="|ні|"></p>
+                                                        </div>
+                                                        <div style="margin-right: 5%; width: 30%;"  >
+                                                            <h6 th:text="|Біженець : |"></h6>
+                                                            <p th:if="${person.isRefugee()}" th:text="|так|"></p>
+                                                            <p th:unless="${person.isRefugee()}" th:text="|ні|"></p>
+                                                        </div>
+                                                        <div style="margin-right: 5%; width: 30%;"  >
+                                                            <h6 th:text="|Може працювати : |"></h6>
+                                                            <p th:if="${person.isAble_for_work()}" th:text="|так|"></p>
+                                                            <p th:unless="${person.isAble_for_work()}" th:text="|ні|"></p>
+                                                        </div>
+                                                        <div style="margin-right: 5%; width: 30%;" th:if="${person.isAble_for_work()}" >
+                                                            <h6 th:text="|Працює : |"></h6>
+                                                            <p th:if="${person.isWork_remote()}" th:text="|віддалено|"></p>
+                                                            <p th:if="${person.isWork_by_place()}" th:text="|за місцем роботи|"></p>
+                                                            <p th:unless="${person.isWork_by_place()} or ${person.isWork_remote()}" th:text="|ні|"></p>
+                                                        </div>
+                                                    </div>
+                                                    <div style="display: flex; flex-direction: row; padding-left: 10%; width: 90%;">
+                                                        <h6 th:text="|Регіон : &nbsp;|"></h6>
+                                                        <p >
+                                                            <span th:text="${person.getState()}"></span>
+                                                            <span th:if="${person.isWar_zone()}" th:text="|&nbsp;- на даний час це є зона бойових дій|"></span>
+                                                            <span th:unless="${person.isWar_zone()}" th:text="|&nbsp;- на даний час це не є зоною бойових дій|"></span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </footer>
+
+                                    </div>
+                                </div>
+
+                            </th>
+                            <td th:text="${person.getFirstname()}" > </td>
+                            <td th:text="${person.getMiddle_name()}" > </td>
+                            <td th:text="${person.getDirectorate()}" > </td>
+                            <td th:text="${person.getPhone()}" > </td>
+                            <td th:text="${person.getDate_add().toLocalDate().toString()}" > </td>
+                            <th class="pl-md-5 th_geolocation" >
+
+                                <!-- Триггер / Открыть Модальный -->
+                                <a th:text="${person.getText_location()}"> </a>
+
+                                <!-- Модальном окно -->
+                                <div class="modal card-header text-center div_modal">
+
+                                    <!-- Модальное содержание -->
+                                    <div class="modal-content map">
+                                        <span class="close">&times;</span>
+
+                                        <footer>
+                                            <div class="footerBox">
+
+                                                <div class="footerInfoBox">
+                                                    <div class="googleMap">
+                                                        <!--<iframe th:src="@{'https://www.google.com/maps/embed/v1/place?key=AIzaSyCsFXx-hAhNheMt_16U1EABV8eqXmc38_s&q=' + ${person.getGeolocation()} + '&center=' + ${person.getGeolocation()} + '&zoom=10&maptype=roadmap&language=ru'}" allowfullscreen="" loading="lazy"></iframe>-->
+                                                        <iframe th:src="${person.getLink_geolocation()}" allowfullscreen="" loading="lazy"></iframe>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </footer>
+
+                                    </div>
+                                </div>
+                            </th>
+                            <td th:text="${person.getLast_modified().toLocalDate().toString()}" > </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer" class="card-footer text-center">
+
+
+        <a th:id="buttonMinus" class="btn btn-outline-success" href="#"  th:style = "${start == 1 } ? 'pointer-events: none;' : ''" > - 20 </a>
+
+        <a id="pageTop" href="#" class="btn btn-secondary"  >На початок сторінки</a>
+
+        <a th:id="buttonPlus" class="btn btn btn-outline-success" href="#" th:style="${end} >= ${persons.size()} ? 'pointer-events: none;' : ''" > + 20 </a>
+
+
+
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.js"
+        th:src="@{https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.js}"></script>
+<script  th:src="@{/modal_filter.js}"></script>
+<script  th:src="@{/modal_google.js}"></script>
+<script  th:src="@{/page_bottom_buttom.js}"></script>
+<script  th:src="@{/input_phone.js}"></script>
+<script th:inline="javascript">
+
+    let stateList = [[${state_list}]];
+
+    console.log(stateList);
+
+</script>
+<script  th:src="@{/choice_region_by_input.js}"></script>
+<script th:inline="javascript">
+
+    let start = [[${start}]] - 1;
+    let end = [[${end}]] - 1;
+    let person_list = [[${session.#lists.toList(persons)}]];
+    let filterParams = [[${filter_params}]];
+
+
+    console.log("start " + start);
+    console.log("end " + end);
+    console.log(person_list);
+    console.log(filterParams);
+
+</script>
+<script th:src="@{/listing_persons.js}"></script>
+</body>
