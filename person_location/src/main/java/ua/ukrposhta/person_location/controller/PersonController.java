@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -100,13 +101,16 @@ public class PersonController {
     }
 
     @PostMapping("refugee-vacation-dangerous-region")
-    public ModelAndView filter(@RequestParam(name = "vacation", required = false) boolean vacation,
+    public ModelAndView filter(@RequestParam(name = "name_form", required = false) String name_form,
+                               @RequestParam(name = "vacation", required = false) boolean vacation,
                                @RequestParam(name = "refugee", required = false) boolean refugee,
                                @RequestParam(name = "able_for_work", required = false) boolean able_for_work,
                                @RequestParam(name = "work_remote", required = false) boolean work_remote,
                                @RequestParam(name = "work_by_place", required = false) boolean work_by_place,
                                @RequestParam(name = "war_zone", required = false) boolean war_zone,
+                               @RequestParam(name = "border", required = false) boolean border,
                                @RequestParam(name = "region", required = false) String region,
+                               @RequestParam(name = "dir", required = false) String directorate,
                                ModelAndView modelAndView
                                ){
 
@@ -114,11 +118,13 @@ public class PersonController {
 
         List<Person> personList = null;
 
-        personList = createFiltering( personList, vacation, refugee, able_for_work,
-                work_remote, work_by_place, war_zone, region);
+        personList = createFiltering( personList, name_form, vacation, refugee, able_for_work,
+                work_remote, work_by_place, war_zone, border, region, directorate);
 
         addInModelAndView(modelAndView,personList,1L,20L,"",personService.allDirectorateName(),
-                createListFilterParam(vacation, refugee, able_for_work, work_remote, work_by_place, war_zone, region));
+                createListFilterParam(name_form, vacation, refugee, able_for_work,
+                                      work_remote, work_by_place, war_zone, border,
+                                      region, directorate));
 
         return modelAndView;
     }
@@ -154,116 +160,190 @@ public class PersonController {
 
     }
 
-    private List<Person> createFiltering(List<Person> personList, boolean vacation, boolean refugee,
+    private List<Person> createFiltering(List<Person> personList, String name, boolean vacation, boolean refugee,
                                          boolean able_for_work, boolean work_remote, boolean work_by_place,
-                                         boolean war_zone, String region) {
+                                         boolean war_zone, boolean border, String region, String directorate) {
 
         logger.info("Start createFiltering method for filter info about persons in PersonController.class");
 
+        if(!name.isEmpty() || !name.equalsIgnoreCase(""))
+            personList = personService.findPersonByLastname(name);
+
         if (vacation)
-            personList = personService.findPersonByVacation(vacation);
+            if (personList != null) {
+
+                personList = personList.stream().map(person -> {
+                    if(person.isVacation() == vacation)
+                        return person;
+                    return null;
+                }).filter(Objects::nonNull).collect(Collectors.toList());
+            } else {
+                personList = personService.findPersonByVacation(vacation);
+            }
 
         if (refugee)
             if (personList != null) {
-                personList = personList.stream().filter(person -> person.isRefugee() == refugee).collect(Collectors.toList());
+                personList = personList.stream().map(person -> {
+                    if(person.isRefugee() == refugee)
+                        return person;
+                    return null;
+                }).filter(Objects::nonNull).collect(Collectors.toList());
+
+//                personList = personList.stream().filter(person -> person.isRefugee() == refugee).collect(Collectors.toList());
             } else {
                 personList = personService.findPersonByRefugee(refugee);
             }
 
         if (able_for_work)
             if (personList != null) {
-                personList = personList.stream().filter(person -> person.isAble_for_work() == able_for_work).collect(Collectors.toList());
+
+                personList = personList.stream().map(person -> {
+                    if(person.isAble_for_work() == able_for_work)
+                        return person;
+                    return null;
+                }).filter(Objects::nonNull).collect(Collectors.toList());
                 if (work_remote)
-                    personList = personList.stream().filter(person -> person.isWork_remote() == work_remote).collect(Collectors.toList());
-
+                    personList = personList.stream().map(person -> {
+                        if(person.isWork_remote() == work_remote)
+                            return person;
+                        return null;
+                    }).filter(Objects::nonNull).collect(Collectors.toList());
                 if (work_by_place)
-                    personList = personList.stream().filter(person -> person.isWork_by_place() == work_by_place).collect(Collectors.toList());
-
+                    personList = personList.stream().map(person -> {
+                        if(person.isWork_by_place() == work_by_place)
+                            return person;
+                        return null;
+                    }).filter(Objects::nonNull).collect(Collectors.toList());
             } else {
                 personList = personService.findPersonByAbleForWork(able_for_work);
             }
 
         if (work_remote)
             if (personList != null) {
-                personList = personList.stream().filter(person -> person.isWork_remote() == work_remote).collect(Collectors.toList());
+                personList = personList.stream().map(person -> {
+                    if(person.isWork_remote() == work_remote)
+                        return person;
+                    return null;
+                }).filter(Objects::nonNull).collect(Collectors.toList());
             } else {
                 personList = personService.findPersonByWorkRemote(work_remote);
             }
 
         if (work_by_place)
             if (personList != null) {
-                personList = personList.stream().filter(person -> person.isWork_by_place() == work_by_place).collect(Collectors.toList());
+                personList = personList.stream().map(person -> {
+                    if(person.isWork_by_place() == work_by_place)
+                        return person;
+                    return null;
+                }).filter(Objects::nonNull).collect(Collectors.toList());
             } else {
                 personList = personService.findPersonByWorkByPlace(work_by_place);
             }
 
         if (war_zone)
             if (personList != null) {
-                personList = personList.stream().filter(person -> person.isWar_zone() == war_zone).collect(Collectors.toList());
+                personList = personList.stream().map(person -> {
+                    if(person.isWar_zone() == war_zone)
+                        return person;
+                    return null;
+                }).filter(Objects::nonNull).collect(Collectors.toList());
             } else {
                 personList = personService.findPersonByWarZone(war_zone);
             }
 
-        if (!region.isEmpty() ||
-                !region.equalsIgnoreCase(""))
-
+        if(border)
+            if(personList != null){
+                personList = personList.stream().map(person -> {
+                    if(!person.getText_location().split(",")[person.getText_location()
+                            .split(",").length - 1].equalsIgnoreCase(" Україна"))
+                        return person;
+                    return null;
+                }).filter(Objects::nonNull).collect(Collectors.toList());
+            } else {
+                personList = personService.findAll().stream()
+                        .filter(person -> !person.getText_location().split(",")[person.getText_location()
+                                .split(",").length - 1].equalsIgnoreCase(" Україна"))
+                        .collect(Collectors.toList());
+            }
+        if (!region.isEmpty() || !region.equalsIgnoreCase(""))
             if (personList != null) {
-                personList = personList.stream().filter(person -> person.getState().equalsIgnoreCase(region)).collect(Collectors.toList());
+                personList = personList.stream().map(person -> {
+                    if(person.getState().equalsIgnoreCase(region))
+                        return person;
+                    return null;
+                }).filter(Objects::nonNull).collect(Collectors.toList());
             } else {
                 personList = personService.findPersonByState(region);
             }
 
+        if (!directorate.isEmpty() || !directorate.equalsIgnoreCase(""))
+            if (personList != null) {
+                if(directorate.equalsIgnoreCase("Не_заповнено")) {
+                    personList = personList.stream().map(person -> {
+                        if(person.getDirectorate().length() == 0)
+                            return person;
+                        return null;
+                    }).filter(Objects::nonNull).collect(Collectors.toList());
+                } else {
+                    personList = personList.stream().map(person -> {
+                        if(person.getDirectorate().equalsIgnoreCase(directorate))
+                            return person;
+                        return null;
+                    }).filter(Objects::nonNull).collect(Collectors.toList());
+                }
+            } else {
+                personList = personService.personListByDirectorate(directorate);
+            }
         return personList;
     }
 
 
-    private List<String> createListFilterParam(boolean vacation, boolean refugee,
+    private List<String> createListFilterParam(String name, boolean vacation, boolean refugee,
                                                boolean able_for_work, boolean work_remote, boolean work_by_place,
-                                               boolean war_zone, String region){
+                                               boolean war_zone, boolean border, String region, String directorate){
 
         logger.info("Start createListFilterParam method for show filter params on tje index.html page in PersonController.class");
 
         List<String> filterParams = new ArrayList<>();
+        if(!name.isEmpty() || !name.equalsIgnoreCase(""))
+            filterParams.add("Прізвище : " + name);
+
         if(vacation) {
             filterParams.add("Відпустка : так");
-        } else {
-            filterParams.add("Відпустка : ні");
         }
 
         if(refugee) {
             filterParams.add("Біженець : так");
-        } else {
-            filterParams.add("Біженець : ні");
         }
 
         if(able_for_work) {
             filterParams.add("Може працювати : так");
-        } else {
-            filterParams.add("Може працювати : ні");
         }
 
         if(work_remote) {
             filterParams.add("Віддаленно : так");
-        } else {
-            filterParams.add("Віддаленно : ні");
         }
 
         if(work_by_place) {
             filterParams.add("За місцем роботи : так");
-        } else {
-            filterParams.add("За місцем роботи : ні;");
         }
 
         if(war_zone) {
             filterParams.add("Зона бойових дій : так");
-        } else {
-            filterParams.add("Зона бойвих дій : ні");
+        }
+
+        if(border) {
+            filterParams.add("За кордоном : так");
         }
 
         if(! region.isEmpty() ||
                 !region.equalsIgnoreCase("")) {
-
             filterParams.add("Регіон : " + region);
+        }
+
+        if(!directorate.isEmpty() ||
+                !directorate.equalsIgnoreCase("")) {
+            filterParams.add("Дірекція : " + directorate);
         }
 
 

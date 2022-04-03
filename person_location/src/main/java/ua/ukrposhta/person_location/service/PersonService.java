@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -64,11 +65,18 @@ public class PersonService {
 //    @Cacheable(value = "directorate")
     public List<String> allDirectorateName(){
         logger.info("Get all directorate name list from db allDirectorateName method PersonService.class");
-        return personRepo.allDirectorateName();
+        return personRepo.allDirectorateName().stream().map(dir -> {
+            if(dir.equalsIgnoreCase(""))
+                dir = "Не_заповнено";
+            return dir;
+        } ).collect(Collectors.toList());
     }
 
     public List<Person> personListByDirectorate(String directorate){
         logger.info("Get all persons list from db by directorate name = " + directorate + " / personListByDirectorate method PersonService.class");
+        if(directorate.equalsIgnoreCase("Не_заповнено"))
+            directorate = "";
+
         return personRepo.findPersonByDirectorate(directorate);
     }
 
@@ -136,6 +144,7 @@ public class PersonService {
     }
 
     // update data_table data in column text_location every hour if change geolocation data
+
     @Scheduled(cron = "0 30 * ? * *")
     public void updateGeolocationData(){
         log.info("update geolocation data");

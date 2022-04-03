@@ -1,18 +1,18 @@
 
 // INPUT REGION NAME FROM LIST OF REGIONS OF EMPLOYEE
 
-let inputRegion = document.getElementById('region');
+let inputRegion = document.getElementById("region");
 
-inputRegion.onclick = cleanInput();
+inputRegion.onclick = reg_cleanInput();
 
 inputRegion.addEventListener("keydown", (event) => {
     if (!event.shiftKey && !event.altKey && !event.ctrlKey) {
 
-        var region = event.target.value;
-        var regions = stateList;
-        var createStateList = [];
-        var divRegions = document.getElementById("regions");
-        var div = document.createElement("div");
+        let region = event.target.value;
+        let regions = stateList;
+        let createStateList = [];
+        let divRegions = document.getElementById("regions");
+        let div = document.createElement("div");
 
         for (let i = 0; i < regions.length; i++) {
             console.log(region);
@@ -41,10 +41,10 @@ inputRegion.addEventListener("keydown", (event) => {
             if(count <= 3) {
                 stringHTML += "<p style='border: 1px solid black; border-top-color: black; " +
                     "border-right-color: black; border-bottom-color: black; border-left-color: black; " +
-                    "border-color: gainsboro; width: 52.5%; margin-left: 24%; margin-bottom: 0' >" + elem + "</p>";
+                    "border-color: gainsboro; width: 100%; margin-bottom: 0' >" + elem + "</p>";
             }
         }
-        detachWhenLengthPNull();
+        reg_detachWhenLengthPNull();
         if (stringHTML !== "") {
 
             div.innerHTML = stringHTML;
@@ -54,29 +54,29 @@ inputRegion.addEventListener("keydown", (event) => {
             stringHTML = "";
         }
         if (event.target.value.length === 0) {
-            detachWhenLengthPNull();
+            reg_detachWhenLengthPNull();
         }
         if(event.target.value.length === 1 && event.key === 'Backspace'){
-            detachWhenLengthPNull();
+            reg_detachWhenLengthPNull();
         }
     }
-    cleanInput();
-    boldWordInInput();
-    deleteBoldWordInInput();
-    inputWordFromMenu();
+    reg_cleanInput();
+    reg_boldWordInInput();
+    reg_deleteBoldWordInInput();
+    reg_inputWordFromMenu();
 });
 
 //Ф-ция удаления содержимого поля input при клике
-function cleanInput() {
+function reg_cleanInput() {
     let input = document.getElementById("region");
     input.onclick = function () {
         input.value = '';
-        detachWhenLengthPNull();
+        reg_detachWhenLengthPNull();
     };
 }
 
 //Ф-ция выделения содержимого тега Р, на котором наведен курсор мышки
-function boldWordInInput() {
+function reg_boldWordInInput() {
     let p = document.querySelectorAll('#regions > div > p');
     p.forEach(p => p.onmouseover = function () {
         this.style.fontWeight = 'bold';
@@ -84,7 +84,7 @@ function boldWordInInput() {
 }
 
 //Ф-ция снятия выделения содержимого тега Р, с котором ушел курсор мышки
-function deleteBoldWordInInput() {
+function reg_deleteBoldWordInInput() {
     let p = document.querySelectorAll('#regions > div > p');
     p.forEach(p => p.onmouseleave = function () {
         this.style.fontWeight = '';
@@ -92,18 +92,18 @@ function deleteBoldWordInInput() {
 }
 
 //Ф-ция ввода в поле поиска региона из раскрываюещгося меню ниже этого поля
-function inputWordFromMenu(){
+function reg_inputWordFromMenu(){
     let p = document.querySelectorAll('#regions > div > p');
     let input = document.querySelector('#regions > input[type=search]');
     p.forEach(p=> p.onclick = function(){
         input.value = p.innerText;
         console.log(input.value);
-        detachWhenLengthPNull();
+        reg_detachWhenLengthPNull();
     });
 }
 
 //Ф-ция удаления тегов Р из под input
-function detachWhenLengthPNull() {
+function reg_detachWhenLengthPNull() {
     document.querySelectorAll('#regions > div > p').forEach(p => p.remove(() => {
         this.detach();
     }));

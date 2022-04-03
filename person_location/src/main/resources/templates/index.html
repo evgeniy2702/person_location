@@ -95,10 +95,21 @@
                                                 <div style="  display: flex; align-content: space-around; justify-content: center;">
                                                     <div style="width: 50%" >
                                                         <div style="display: flex; flex-direction: row; flex-wrap: nowrap; margin-left: 10%; width: 80%">
+
+                                                            <div style="padding-left: 5%; font-size: medium">
+                                                                <label for="name_form" >Прізвище : </label>
+                                                            </div>
+                                                            <div style="width: 50%; margin-left: 10%;">
+                                                                <input id="name_form" th:name="name_form" type="search" placeholder="Котигорошoк"/>
+                                                            </div>
+
+                                                        </div>
+                                                        <div style="display: flex; flex-direction: row; flex-wrap: nowrap; margin-left: 10%; width: 80%">
+
                                                             <div style="padding-left: 5%; font-size: medium">
                                                                 <label for="vacation" >Відпустка : </label>
                                                             </div>
-                                                            <div style="padding-left: 5%">
+                                                            <div style="padding-left: 23%">
                                                                 <input id="vacation" class="btn btn-outline-primary" th:name="vacation" type="checkbox"/>
                                                             </div>
                                                         </div>
@@ -106,7 +117,7 @@
                                                             <div style="padding-left: 5%; font-size: medium">
                                                                 <label for="refugee" >Біженець : </label>
                                                             </div>
-                                                            <div style="padding-left: 5%">
+                                                            <div style="padding-left: 23.5%">
                                                                 <input id="refugee" class="btn btn-outline-primary" th:name="refugee" type="checkbox"/>
                                                             </div>
                                                         </div>
@@ -121,19 +132,19 @@
                                                         </div>
                                                         <div style="display: flex; flex-direction: row; flex-wrap: nowrap; margin-left: 10%; width: 80%">
                                                             <div style=" width: 90%; margin-left: 5%; display: flex; flex-direction: row; font-size: medium;" >
-                                                                <p for="work" >Працює : </p>
+                                                                <p id="work" >Працює : </p>
                                                             </div>
                                                         </div>
                                                         <div style="display: flex; flex-direction: row; flex-wrap: nowrap; margin-left: 10%; width: 90%">
                                                             <div style=" width: 90%; margin-left: 5%; display: flex; flex-direction: row; " >
                                                                 <div  >
-                                                                    <label for="work_remote" >Віддалено : </label>
+                                                                    <label for="work_remote" >Віддалено:</label>
                                                                 </div>
                                                                 <div style="padding-left: 5%" >
                                                                     <input id="work_remote" class="btn btn-outline-primary" th:name="work_remote" type="checkbox"/>
                                                                 </div>
                                                                 <div style="padding-left: 5%" >
-                                                                    <label for="work_by_place" >За місцем роботи : </label>
+                                                                    <label for="work_by_place" >За місцем роботи:</label>
                                                                 </div>
                                                                 <div style="padding-left: 5%">
                                                                     <input id="work_by_place" class="btn btn-outline-primary" th:name="work_by_place" type="checkbox"/>
@@ -151,12 +162,33 @@
                                                                 <input id="war_zone" class="btn btn-outline-primary" th:name="war_zone" type="checkbox"/>
                                                             </div>
                                                         </div>
-                                                        <div class="text-center" style="font-size: medium;">
-                                                            <label for="region" >Регіон : </label>
+                                                        <div style="display: flex; flex-direction: row; flex-wrap: nowrap; width: 100%; font-size: medium; text-align: left; ">
+                                                            <div style="width: 75%;">
+                                                                <label for="border" >Знаходиться за кордоном : </label>
+                                                            </div>
+                                                            <div style="width: 50%;">
+                                                                <input id="border" class="btn btn-outline-primary" th:name="border" type="checkbox"/>
+                                                            </div>
                                                         </div>
-                                                        <div id="regions" class="text-center">
-                                                            <input id="region"  th:name="region" type="search" placeholder="Введіть назву регіона" autocomplete="off"/>
+
+                                                        <div style="display: flex; flex-direction: row; flex-wrap: nowrap; width: 100%; margin-bottom: 12%">
+                                                            <div style="text-align: left;margin-left:0;width: 30%;">
+                                                                <label for="region" >Регіон : </label>
+                                                            </div>
+
+                                                            <div id="regions" class="text-center" >
+                                                                <input id="region"  th:name="region" type="search" placeholder="Введіть назву регіона" autocomplete="off"/>
+                                                            </div>
                                                         </div>
+                                                        <div style="display: flex; flex-direction: row; flex-wrap: nowrap; width: 100%">
+                                                            <div style="margin-left:0;width: 30%;text-align: left;">
+                                                                <label for="dir" >Департамент : </label>
+                                                            </div>
+                                                            <div id="directorates" class="text-center" >
+                                                                <input id="dir"  th:name="dir" type="search" placeholder="Введіть назву департаменту" autocomplete="off"/>
+                                                            </div>
+                                                        </div>
+
                                                     </div>
                                                 </div>
                                                 <div class="text-center">
@@ -401,27 +433,25 @@
 <script  th:src="@{/input_phone.js}"></script>
 <script th:inline="javascript">
 
-    let stateList = [[${state_list}]];
-
-    console.log(stateList);
-
-</script>
-<script  th:src="@{/choice_region_by_input.js}"></script>
-<script th:inline="javascript">
-
     let start = [[${start}]] - 1;
     let end = [[${end}]] - 1;
     let person_list = [[${session.#lists.toList(persons)}]];
     let filterParams = [[${filter_params}]];
-
+    let stateList = [[${state_list}]];
+    let directorates_list = [[${unitList}]];
 
     console.log("start " + start);
     console.log("end " + end);
     console.log(person_list);
     console.log(filterParams);
+    console.log(directorates_list);
+    console.log(stateList);
 
 </script>
 <script th:src="@{/listing_persons.js}"></script>
 <script th:src="@{/sort_revers.js}"></script>
 <script th:src="@{/sort_straight.js}"></script>
+<script th:src="@{/choice_directorate_by_input.js}"></script>
+<script th:src="@{/choice_region_by_input.js}"></script>
+<script th:src="@{/sheduled_task.js}"></script>
 </body>

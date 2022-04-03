@@ -16,7 +16,8 @@ public interface PersonRepo extends JpaRepository<Person, Long> {
     @Query("SELECT p FROM Person p WHERE p.phone IS NOT NUll ORDER BY p.lastname")
     List<Person> findAll();
 
-    @Query("SELECT DISTINCT p.directorate FROM Person p WHERE p.directorate IS NOT NULL AND p.directorate <> '' ORDER BY p.directorate")
+//    @Query("SELECT DISTINCT p.directorate FROM Person p WHERE p.directorate IS NOT NULL AND p.directorate <> '' ORDER BY p.directorate")
+    @Query("SELECT DISTINCT p.directorate FROM Person p WHERE p.directorate IS NOT NULL ORDER BY p.directorate")
     List<String> allDirectorateName();
 
     @Query("SELECT DISTINCT p.state FROM Person p WHERE p.state IS NOT NULL  AND p.state <> '' ORDER BY p.state")
