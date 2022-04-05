@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- my appender for console logs for workspace profile-->
+    <springProfile name="workspace">
+
+        <!-- appender console by default -->
+
+        <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+        <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+        <!-- my appender for console logs-->
+
+        <!--<appender name="Console"-->
+        <!--class="ch.qos.logback.core.ConsoleAppender">-->
+        <!--<layout class="ch.qos.logback.classic.PatternLayout">-->
+        <!--<Pattern>-->
+        <!--%d{ISO8601} %green(${LOG_LEVEL_PATTERN:-%-5level}){FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=green, DEBUG=green bold, TRACE=blue} %magenta(${PID}) -&#45;&#45; [%15.15t] %cyan(%-40.40C{1.}) : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%xEx}-->
+        <!--</Pattern>-->
+        <!--</layout>-->
+        <!--</appender>-->
+
+        <!-- LOG everything at INFO level -->
+
+        <root level="info">
+            <appender-ref ref="CONSOLE" />
+        </root>
+
+        <!-- LOG "ua.ukrposhta.person_location.utils.LoggerFile*" at TRACE level -->
+
+        <logger name="ua.ukrposhta.person_location" level="trace" additivity="false">
+            <appender-ref ref="CONSOLE" />
+        </logger>
+
+    </springProfile>
+
+    <!-- my appender for write to files logs for dev profile-->
+    <springProfile name="dev">
+
+        <!-- appender console by default -->
+
+        <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+        <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+        <!--appender for write the log to the file by the direct ${catalina.base}/logs/dev/console.log-->
+
+        <property name="LOGS" value="${catalina.base}/logs/dev" />
+
+        <appender name="RollingFile"
+                  class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOGS}/console.log</file>
+            <encoder
+                    class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <Pattern>
+                    %d{ISO8601} %-5level ${PID} --- [%15.15t] %-40.40C{1.} : %m%n%xEx
+                </Pattern>
+            </encoder>
+
+            <rollingPolicy
+                    class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <!-- rollover daily and when the file reaches 10 MegaBytes -->
+                <fileNamePattern>
+                    ${LOGS}/archived/console_%d{yyyy-MM-dd}.%i.log
+                </fileNamePattern>
+                <timeBasedFileNamingAndTriggeringPolicy
+                        class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>10MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+            </rollingPolicy>
+        </appender>
+
+        <!-- LOG everything at INFO level -->
+
+        <root level="info">
+            <appender-ref ref="RollingFile" />
+            <appender-ref ref="CONSOLE" />
+        </root>
+
+        <!-- LOG "ua.ukrposhta.person_location" at TRACE level -->
+
+        <logger name="ua.ukrposhta.person_location" level="trace" additivity="false">
+            <appender-ref ref="RollingFile" />
+            <appender-ref ref="CONSOLE" />
+        </logger>
+
+    </springProfile>
+
+    <!-- my appender for write to files logs for prod profile-->
+    <springProfile name="prod">
+
+        <!-- appender console by default -->
+
+        <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+        <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+        <!-- appender for write the log to the file by the direct ${catalina.base}/logs/prod/console.log -->
+
+        <property name="LOGS" value="${catalina.base}/logs/prod" />
+
+        <appender name="RollingFile"
+                  class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOGS}/console.log</file>
+            <encoder
+                    class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <Pattern>
+                    %d{ISO8601} %-5level ${PID} --- [%15.15t] %-40.40C{1.} : %m%n%xEx
+                </Pattern>
+            </encoder>
+
+            <rollingPolicy
+                    class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <!-- rollover daily and when the file reaches 10 MegaBytes -->
+                <fileNamePattern>
+                    ${LOGS}/archived/console_%d{yyyy-MM-dd}.%i.log
+                </fileNamePattern>
+                <timeBasedFileNamingAndTriggeringPolicy
+                        class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>10MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+            </rollingPolicy>
+        </appender>
+
+        <!-- LOG everything at INFO level -->
+
+        <root level="info">
+            <appender-ref ref="RollingFile" />
+            <appender-ref ref="CONSOLE" />
+        </root>
+
+        <!-- LOG "ua.ukrposhta.person_location" at TRACE level -->
+
+        <logger name="ua.ukrposhta.person_location" level="trace" additivity="false">
+            <appender-ref ref="RollingFile" />
+            <appender-ref ref="CONSOLE" />
+        </logger>
+    </springProfile>
+
+</configuration>

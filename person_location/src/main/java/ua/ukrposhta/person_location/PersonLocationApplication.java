@@ -16,7 +16,6 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 public class PersonLocationApplication
 		extends AbstractAnnotationConfigDispatcherServletInitializer {
 
-
 	public static void main(String[] args) {
 		SpringApplication.run(PersonLocationApplication.class, args);
 	}

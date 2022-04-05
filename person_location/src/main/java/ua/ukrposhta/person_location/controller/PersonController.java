@@ -1,12 +1,16 @@
 package ua.ukrposhta.person_location.controller;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import ua.ukrposhta.person_location.service.PersonService;
 import ua.ukrposhta.person_location.model.Person;
-import ua.ukrposhta.person_location.utils.ConsoleLogger;
+import ua.ukrposhta.person_location.service.PersonService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,10 +23,21 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping({"/","/person-location-data-filter/","/person-location-data-filter"})
+@PropertySource("classpath:properties/site.properties")
 public class PersonController {
 
-    private ConsoleLogger logger = ConsoleLogger.getInstance();
+    private Environment env;
     private PersonService personService;
+    private Logger logger = LoggerFactory.getLogger(PersonController.class);
+    @Value("${start}")
+    private String start;
+    @Value("${end}")
+    private String end;
+
+    @Autowired
+    public void setEnv(Environment env) {
+        this.env = env;
+    }
 
     @Autowired
     public void setPersonService(PersonService personService) {
@@ -34,10 +49,11 @@ public class PersonController {
     public ModelAndView startPage(ModelAndView modelAndView){
 
         logger.info("Start startPage method in PersonController.class");
+        logger.warn("start : " + start + " end : " + end);
 
         addInModelAndView(modelAndView,
                 personService.findAll(),
-                1L,20L,"",
+                Long.valueOf(start),Long.valueOf(end),"",
                 personService.allDirectorateName(), null);
 
         return modelAndView;
@@ -50,7 +66,7 @@ public class PersonController {
         logger.info("Start listPersonByLastName method in PersonController.class");
 
         addInModelAndView(modelAndView,personService.findPersonByLastname(partLastname),
-                1L,20L,"",
+                Long.valueOf(start),Long.valueOf(end),"",
                 personService.allDirectorateName(), Collections.singletonList("за прізвищем"));
         return modelAndView;
     }
@@ -64,7 +80,7 @@ public class PersonController {
 
         List<Person> person = personService.personByPhone(phone);
 
-        addInModelAndView(modelAndView,person,1L,20L,"",
+        addInModelAndView(modelAndView,person,Long.valueOf(start),Long.valueOf(end),"",
                 personService.allDirectorateName(),
                 Collections.singletonList("за номером телефону"));
 
@@ -80,7 +96,7 @@ public class PersonController {
         LocalDateTime dateStart = LocalDateTime.parse(date + "T00:00:00.00000");
         LocalDateTime dateEnd = LocalDateTime.parse(date + "T23:59:59.99999");
 
-        addInModelAndView(modelAndView,personService.findPersonByLastModified(dateStart, dateEnd),1L,20L,
+        addInModelAndView(modelAndView,personService.findPersonByLastModified(dateStart, dateEnd),Long.valueOf(start),Long.valueOf(end),
                 date,personService.allDirectorateName(), Collections.singletonList(" за датою " + date));
 
         return modelAndView;
@@ -94,7 +110,7 @@ public class PersonController {
 
         addInModelAndView(modelAndView,
                 personService.personListByDirectorate(directorate),
-                1L,20L,"",
+                Long.valueOf(start),Long.valueOf(end),"",
                 personService.allDirectorateName(), Collections.singletonList(" за департаментом " + directorate));
 
         return modelAndView;
@@ -121,7 +137,7 @@ public class PersonController {
         personList = createFiltering( personList, name_form, vacation, refugee, able_for_work,
                 work_remote, work_by_place, war_zone, border, region, directorate);
 
-        addInModelAndView(modelAndView,personList,1L,20L,"",personService.allDirectorateName(),
+        addInModelAndView(modelAndView,personList,Long.valueOf(start),Long.valueOf(end),"",personService.allDirectorateName(),
                 createListFilterParam(name_form, vacation, refugee, able_for_work,
                                       work_remote, work_by_place, war_zone, border,
                                       region, directorate));

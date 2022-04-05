@@ -1,14 +1,15 @@
 package ua.ukrposhta.person_location;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.Assert;
+import org.junit.Test;
 
 
-@SpringBootTest
 public class PersonLocationApplicationTests {
 
 	@Test
-	void contextLoads() {
+	public void testHelloWorld() {
+		System.out.println("Hello Junit!");
+		Assert.assertTrue(true);
 	}
 
 }

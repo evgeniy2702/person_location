@@ -1,18 +1,20 @@
 package ua.ukrposhta.person_location.service;
 
-import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import ua.ukrposhta.person_location.controller.PersonController;
 import ua.ukrposhta.person_location.geocoder.Geocoder;
 import ua.ukrposhta.person_location.model.Person;
 import ua.ukrposhta.person_location.repositoriy.PersonRepo;
-import ua.ukrposhta.person_location.utils.ConsoleLogger;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -22,15 +24,16 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
 @EnableScheduling
+@PropertySource("classpath:properties/site.properties")
 public class PersonService {
 
     @Value("${cron}")
     protected String cron_data = "0 0 0/1 ? * *";
     private PersonRepo personRepo;
     private Geocoder geocoder;
-    private ConsoleLogger logger = ConsoleLogger.getInstance();
+    private Logger logger = LoggerFactory.getLogger(PersonService.class);
+
     private String YOUR_API_KEY = "AIzaSyCsFXx-hAhNheMt_16U1EABV8eqXmc38_s";
 
     @Autowired
@@ -46,7 +49,6 @@ public class PersonService {
 
 //    @Cacheable(value = "person")
     public List<Person> findAll(){
-        log.info("get users list from db ");
         logger.info("Get all persons list from db findAll method PersonService.class");
         return personRepo.findAll();
     }
@@ -57,7 +59,6 @@ public class PersonService {
 
 
     public Person getById(Long id){
-        log.info("get person from db by id = {}", id);
         logger.info("Get person from db by id = " + id + " / getById method PersonService.class" );
         return personRepo.getPersonById(id);
     }
@@ -82,7 +83,6 @@ public class PersonService {
 
 //    @CacheEvict(value = "persons")
     public Person updatePerson(Person person){
-        log.info("Update person : {}", person.getGeolocation());
         logger.info("Update person data in id = " + person.getId() + " / updatePerson method PersonService.class");
         return personRepo.saveAndFlush(person);
     }
@@ -93,7 +93,6 @@ public class PersonService {
     }
 
     public List<Person> findPersonByLastname(String lastname){
-        log.info("get person from db by partname = {}", lastname);
         logger.info("Get persons list from db by part of lastname = " + lastname + " / findPersonByLastname method PersonService.class");
         return personRepo.findPersonByLastname(lastname);
     }
@@ -145,9 +144,8 @@ public class PersonService {
 
     // update data_table data in column text_location every hour if change geolocation data
 
-    @Scheduled(cron = "0 30 * ? * *")
+    @Scheduled(cron = "0 0 0/2 ? * *")
     public void updateGeolocationData(){
-        log.info("update geolocation data");
         logger.info("Update geolocation data in db if change by scheduled cron  = " + cron_data + " / updateGeolocationData method PersonService.class");
         checkChangeGeolocation(personRepo.findAll());
     }
