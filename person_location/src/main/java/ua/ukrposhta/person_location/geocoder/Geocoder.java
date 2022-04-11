@@ -33,7 +33,6 @@ public class Geocoder {
                 String.class
         );
 
-        logger.info("response : " + response.getBody());
         logger.info("response status : " + response.getStatusCode().toString());
 
         return response.getBody();

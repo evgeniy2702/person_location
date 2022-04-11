@@ -29,9 +29,6 @@ public interface PersonRepo extends JpaRepository<Person, Long> {
     @Query("SELECT p FROM Person p WHERE p.phone = :phone ORDER BY p.lastname")
     List<Person> findPersonByPhone(@Param("phone") String phone);
 
-    Person getPersonById(Long id);
-
-
 //    @Query("SELECT p FROM Person p WHERE p.directorate = :directorate and p.last_modified LIKE :last_modified ORDER BY p.lastname")
 //    List<Person> findPersonByDirectorateAndLast_modifiedIsContaining(@Param("directorate") String directorate,
 //                                                                    @Param("last_modified") LocalDateTime last_modified );

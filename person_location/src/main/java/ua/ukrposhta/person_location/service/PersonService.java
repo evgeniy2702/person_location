@@ -5,18 +5,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import ua.ukrposhta.person_location.controller.PersonController;
+import ua.ukrposhta.person_location.config.CacheConfig;
 import ua.ukrposhta.person_location.geocoder.Geocoder;
 import ua.ukrposhta.person_location.model.Person;
 import ua.ukrposhta.person_location.repositoriy.PersonRepo;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -30,11 +33,17 @@ public class PersonService {
 
     @Value("${cron}")
     protected String cron_data = "0 0 0/1 ? * *";
+    private CacheConfig ehcacheManager;
     private PersonRepo personRepo;
     private Geocoder geocoder;
     private Logger logger = LoggerFactory.getLogger(PersonService.class);
 
     private String YOUR_API_KEY = "AIzaSyCsFXx-hAhNheMt_16U1EABV8eqXmc38_s";
+
+    @Autowired
+    public void setEhcacheManager(CacheConfig ehcacheManager) {
+        this.ehcacheManager = ehcacheManager;
+    }
 
     @Autowired
     public void setGeocoder(Geocoder geocoder) {
@@ -47,23 +56,38 @@ public class PersonService {
     }
 
 
-//    @Cacheable(value = "person")
+    @Cacheable(value = "allPersons", key = "'full_list'")
     public List<Person> findAll(){
         logger.info("Get all persons list from db findAll method PersonService.class");
         return personRepo.findAll();
     }
 
+    private void refreshCache() throws IOException {
+        logger.info("Refresh cache start in refreshCache method PersonService.class");
+
+        logger.info("Evict cache with name " + ehcacheManager.cacheManager()
+                .getCache("allPersons").getName() + " evict is " +
+                ehcacheManager.cacheManager().getCache("allPersons").evictIfPresent("full_list"));
+
+        List<Person> listCache = personRepo.findAll();
+
+        ehcacheManager.cacheManager()
+                .getCache("allPersons").put("full_list", listCache);
+
+        logger.info("Refresh cache end");
+    }
+
+    //    @CachePut(value = "allPersons", key = "'full_list'")
     public List<Person> findAllSorting(){
         return personRepo.findAll(Sort.by(Direction.DESC, "lastname"));
     }
 
-
     public Person getById(Long id){
         logger.info("Get person from db by id = " + id + " / getById method PersonService.class" );
-        return personRepo.getPersonById(id);
+        return personRepo.getById(id);
     }
 
-//    @Cacheable(value = "directorate")
+    @Cacheable(value = "directorate", key = "'list_directorate'")
     public List<String> allDirectorateName(){
         logger.info("Get all directorate name list from db allDirectorateName method PersonService.class");
         return personRepo.allDirectorateName().stream().map(dir -> {
@@ -81,7 +105,7 @@ public class PersonService {
         return personRepo.findPersonByDirectorate(directorate);
     }
 
-//    @CacheEvict(value = "persons")
+//    @Cacheable(value = "persons", key = "#person.id")
     public Person updatePerson(Person person){
         logger.info("Update person data in id = " + person.getId() + " / updatePerson method PersonService.class");
         return personRepo.saveAndFlush(person);
@@ -144,43 +168,77 @@ public class PersonService {
 
     // update data_table data in column text_location every hour if change geolocation data
 
-    @Scheduled(cron = "0 0 0/2 ? * *")
-    public void updateGeolocationData(){
+    @Scheduled(cron = "0 0 0/3 ? * *")
+    public void updateGeolocationData() throws IOException {
         logger.info("Update geolocation data in db if change by scheduled cron  = " + cron_data + " / updateGeolocationData method PersonService.class");
-        checkChangeGeolocation(personRepo.findAll());
+        checkChangeGeolocationData(ehcacheManager.cacheManager().getCache("allPersons").get("full_list", ArrayList.class));
     }
 
-    private void checkChangeGeolocation(List<Person> personList){
+    private void checkChangeGeolocationData(List<Person> personList)throws IOException{
 
-        logger.info("Start checkChangeGeolocation method PersonService.class");
+        logger.info("Start checkChangeGeolocationIfDifferentGeolocationOrText_locationData method PersonService.class");
 
-            for (Person person : personList) {
-                try {
+        for (Person person : personList) {
+            try {
+                if(!person.getGeolocation().equalsIgnoreCase(personRepo.findById(person.getId()).get().getGeolocation()) ||
+                        person.getText_location().equalsIgnoreCase("") ) {
 
-                    geocoderSetUp(person);
-
-                } catch (Exception e ) {
-
-                    logger.error("ERROR in geocoderSetUp method PersonService.class in identify the GEO string : " + Arrays.toString(e.getStackTrace()));
-                    System.out.println(Arrays.toString(e.getStackTrace()));
-
-                    String  state = "Місце знаходження визначити не вдалося. Перевірте координати.";
-
-                    person.setText_location(state);
-
-                    person.setState(state);
-
-                    person.setLink_geolocation("https://www.google.com/maps/embed/v1/place?key=" + YOUR_API_KEY + "&q=" + person.getGeolocation()
-                            + "&center=" + person.getGeolocation() + "&zoom=10&maptype=roadmap&language=ru");
-
-                    this.updatePerson(person);
-
+                    geocoderSetUp(personRepo.findById(person.getId()).get());
                 }
-            }
 
-            logger.info("------- End to identify of geolocation-------");
+            } catch (Exception e ) {
+
+                logger.error("ERROR in geocoderSetUp method PersonService.class in identify the GEO string : " + Arrays.toString(e.getStackTrace()));
+
+                String  state = "Місце знаходження визначити не вдалося. Перевірте координати.";
+
+                person.setText_location(state);
+
+                person.setState(state);
+
+                person.setLink_geolocation("https://www.google.com/maps/embed/v1/place?key=" + YOUR_API_KEY + "&q=" + person.getGeolocation()
+                        + "&center=" + person.getGeolocation() + "&zoom=10&maptype=roadmap&language=ru");
+
+                this.updatePerson(person);
+
+            }
+        }
+
+        refreshCache();
+
+        List<Person> removePersonList = personRepo.findAll();
+        removePersonList.removeAll(personList);
+        logger.info("Size of list of objects that do not include in cache = " + removePersonList.size());
+
+        for ( Person person : removePersonList) {
+            try {
+
+                geocoderSetUp(person);
+
+            } catch (Exception e) {
+
+                logger.error("ERROR in geocoderSetUp method PersonService.class in identify the GEO string : " + Arrays.toString(e.getStackTrace()));
+
+                person.setLink_geolocation("https://www.google.com/maps/embed/v1/place?key=" + YOUR_API_KEY + "&q=" + person.getGeolocation()
+                        + "&center=" + person.getGeolocation() + "&zoom=10&maptype=roadmap&language=ru");
+
+                String state = "Місце знаходження визначити не вдалося. Перевірте координати.";
+
+                person.setText_location(state);
+
+                person.setState(state);
+
+                this.updatePerson(person);
+
+            }
+        }
+
+        refreshCache();
+
+        logger.info("------- End to identify of geolocation in checkChangeGeolocationIfDifferentGeolocationOrText_locationData method -------");
 
     }
+
 
 
     public void geocoderSetUp(Person person){
@@ -204,10 +262,6 @@ public class PersonService {
             JSONObject jsonBody = new JSONObject(geo);
 
             System.out.println("---------------------------------------------");
-            System.out.println("jsonBody " + jsonBody);
-
-            logger.info("---------------------------------------------");
-            logger.info("jsonBody " + jsonBody);
 
             String state = "";
 
