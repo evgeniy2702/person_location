@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 public class PersonService {
 
     @Value("${cron}")
-    protected String cron_data = "0 0 0/1 ? * *";
+    protected String cron_data = "0 0 0/3 ? * *";
     private CacheConfig ehcacheManager;
     private PersonRepo personRepo;
     private Geocoder geocoder;

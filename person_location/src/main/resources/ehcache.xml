@@ -1,9 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="http://www.ehcache.org/v3"
         xmlns:jsr107="http://www.ehcache.org/v3/jsr107"
         xsi:schemaLocation="
             http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd
             http://www.ehcache.org/v3/jsr107 http://www.ehcache.org/schema/ehcache-107-ext-3.0.xsd">
+
+    <service>
+        <jsr107:defaults enable-statistics="true" enable-management="true"/>
+    </service>
 
     <!-- CACHE LIST OF PERSON-->
     <cache alias="allPersons">
@@ -13,20 +19,26 @@
             <!--<ttl unit="hours">24</ttl>-->
         <!--</expiry>-->
         <resources>
-            <heap unit="MB">10</heap>
-            <offheap unit="MB">100</offheap>
+            <heap unit="MB">250</heap>
+            <offheap unit="MB">500</offheap>
         </resources>
+        <heap-store-settings>
+            <max-object-graph-size>70000</max-object-graph-size>
+            <max-object-size unit="kB">3</max-object-size>
+        </heap-store-settings>
     </cache>
+
     <!-- CACHE LIST OF DIRECTORATE -->
+    <!-- if i turn on set up of heap in MB less than 1M i get error as "Max Object Size reached for the object".
+     In that key i set up the heap config by limit number of entries instead of memory-->
     <cache alias="directorate">
         <key-type>java.lang.String</key-type>
         <value-type>java.util.List</value-type>
         <expiry>
-        <ttl unit="hours">4</ttl>
+            <ttl unit="hours">4</ttl>
         </expiry>
         <resources>
-            <heap unit="MB">2</heap>
-            <offheap unit="MB">10</offheap>
+            <heap>150</heap>
         </resources>
     </cache>
 
