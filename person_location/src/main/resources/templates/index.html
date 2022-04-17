@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/modal.css}" >
     <link rel="stylesheet" type="text/css" th:href="@{/logo.css}" >
     <link rel="stylesheet" type="text/css" th:href="@{/rounded.css}" >
+    <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js}"></script>
 </head>
 <body >
 
@@ -249,11 +250,15 @@
             <a class="btn btn-info" th:href="@{~/person-location-data-filter/current-date}">Відомості станом на поточну дату !</a>
             <a th:id="pageBottom" class="btn btn-secondary" style="color: white;" >В кінець сторінки</a>
 
+            <a th:id="excelWrite" class="btn btn-info" style="color: white;" >Звіт в EXCEL форматі .</a>
+
             <a th:id="buttonTopPlus" class="btn btn btn-outline-success buttonPlus" href="#"
                th:style="${end} >= ${persons.size()} ? 'pointer-events: none;' : ''"
             > + 20 </a>
 
         </div>
+
+        <div th:id="content"></div>
 
     </div>
 </div>
@@ -438,13 +443,11 @@
     let filterParams = [[${filter_params}]];
     let stateList = [[${state_list}]];
     let directorates_list = [[${unitList}]];
+    let date = [[${date}]];
 
     console.log("start " + start);
     console.log("end " + end);
-    console.log(person_list);
-    console.log(filterParams);
-    console.log(directorates_list);
-    console.log(stateList);
+    console.log("date " + date);
 
 </script>
 <script th:src="@{/listing_persons.js}"></script>
@@ -452,4 +455,6 @@
 <script th:src="@{/sort_straight.js}"></script>
 <script th:src="@{/choice_directorate_by_input.js}"></script>
 <script th:src="@{/choice_region_by_input.js}"></script>
+<script th:src="@{/send_json_to_back_end.js}"></script>
+<script th:src="@{/filesaver.js}"></script>
 </body>

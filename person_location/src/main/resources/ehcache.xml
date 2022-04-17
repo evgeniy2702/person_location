@@ -10,6 +10,10 @@
     <service>
         <jsr107:defaults enable-statistics="true" enable-management="true"/>
     </service>
+    <heap-store>
+        <max-object-graph-size>70000</max-object-graph-size>
+        <max-object-size unit="kB">3</max-object-size>
+    </heap-store>
 
     <!-- CACHE LIST OF PERSON-->
     <cache alias="allPersons">
@@ -22,10 +26,10 @@
             <heap unit="MB">250</heap>
             <offheap unit="MB">500</offheap>
         </resources>
-        <heap-store-settings>
-            <max-object-graph-size>70000</max-object-graph-size>
-            <max-object-size unit="kB">3</max-object-size>
-        </heap-store-settings>
+        <!--<heap-store-settings>-->
+            <!--<max-object-graph-size>65000</max-object-graph-size>-->
+            <!--<max-object-size unit="kB">3</max-object-size>-->
+        <!--</heap-store-settings>-->
     </cache>
 
     <!-- CACHE LIST OF DIRECTORATE -->

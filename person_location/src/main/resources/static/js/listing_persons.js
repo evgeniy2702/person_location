@@ -13,7 +13,7 @@ divHeader.children[0].replaceWith(buttonTopMinusNewTag);
 let buttonTopPlusNew = "<a id='buttonTopPlus' class='btn btn-outline-success' href='#' > + 20 </a>";
 let buttonTopPlusNewTag = document.createElement("a");
 buttonTopPlusNewTag.innerHTML = buttonTopPlusNew;
-divHeader.children[3].replaceWith(buttonTopPlusNewTag);
+divHeader.children[4].replaceWith(buttonTopPlusNewTag);
 
 let buttonTopPlus = document.getElementById("buttonTopPlus");
 let buttonTopMinus = document.getElementById("buttonTopMinus");

@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping({"/","/person-location-data-filter/","/person-location-data-filter"})
+@RequestMapping({"","person-location-data-filter/","person-location-data-filter"})
 @PropertySource("classpath:properties/site.properties")
 public class PersonController {
 
@@ -43,7 +43,6 @@ public class PersonController {
     public void setPersonService(PersonService personService) {
         this.personService = personService;
     }
-
 
     @GetMapping({"","current-date"})
     public ModelAndView startPage(ModelAndView modelAndView){
@@ -144,6 +143,7 @@ public class PersonController {
 
         return modelAndView;
     }
+
 
     private void addInModelAndView(ModelAndView modelAndView, List<Person> personList, Long start, Long end,
                                    String date, List<String> directorateList, List<String> filterParams) {

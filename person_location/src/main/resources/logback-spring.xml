@@ -44,7 +44,7 @@
 
         <!--appender for write the log to the file by the direct ${catalina.base}/logs/dev/console.log-->
 
-        <property name="LOGS" value="${catalina.base}/logs/dev" />
+        <property name="LOGS" value="${catalina.base}/logs/PersonLocationDataFilterDev" />
 
         <appender name="RollingFile"
                   class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -95,7 +95,7 @@
 
         <!-- appender for write the log to the file by the direct ${catalina.base}/logs/prod/console.log -->
 
-        <property name="LOGS" value="${catalina.base}/logs/prod" />
+        <property name="LOGS" value="${catalina.base}/logs/PersonLocationDataFilterProd" />
 
         <appender name="RollingFile"
                   class="ch.qos.logback.core.rolling.RollingFileAppender">
