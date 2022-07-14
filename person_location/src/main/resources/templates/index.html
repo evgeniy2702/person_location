@@ -18,7 +18,7 @@
 
 <!-- HEADER WITH FILTER-->
 <div class="container ">
-    <img class="logo" src="https://peredplata.ukrposhta.ua/image/catalog/asset2.png">
+    <img alt="Ukrposhta_logo" class="logo" src="https://peredplata.ukrposhta.ua/image/catalog/asset2.png">
     <h4 class="text-center" style="color: brown;">
         Відомості щодо місця розташування співробітників УКРПОШТА станом на :
         <span th:text="${date}" style="color: darkblue;"> 26.07.2021</span> <span style="color: darkblue;">р.</span>
@@ -43,8 +43,8 @@
                                 <span class="close">&times;</span>
                                 <form th:id="linkFormName" th:action="@{~/person-location-data-filter/person-list/by-lastname}"  th:method="post" >
 
-                                    <label for="name" >Введіть прізвище співробітника : </label>
-                                    <input id="name" th:name="name" type="search" placeholder="Котигорошoк"/>
+                                        <label for="name" >Введіть прізвище співробітника : </label>
+                                        <input id="name" th:name="name" type="search" placeholder="Котигорошoк"/>
 
                                     <input type="submit" th:form="linkFormName" value="Відправити" class="btn btn-info" />
 
@@ -90,7 +90,7 @@
                                 <footer>
                                     <div class="footerBox">
 
-                                        <div class="footerInfoBox " text-center>
+                                        <div class="footerInfoBox">
                                             <form th:id="linkFormFilter" th:action="@{~/person-location-data-filter/refugee-vacation-dangerous-region}"  th:method="post">
                                                 <div style="  display: flex; align-content: space-around; justify-content: center;">
                                                     <div style="width: 50%" >

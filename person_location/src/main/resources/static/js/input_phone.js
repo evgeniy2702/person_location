@@ -3,7 +3,7 @@
 let inputPhone = document.getElementById('tel');
 
 inputPhone.addEventListener("keydown", (event) => {
-    var text = event.target.value;
+    let text = event.target.value;
     console.log(event.code + " " + event.key);
     if (event.key !== "Enter") {
         if (text.length === 3 || text.length === 7 || text.length === 10) {

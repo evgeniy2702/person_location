@@ -1,13 +1,13 @@
 // PERSON BY LASTNAME
 
 // Get the modal
-var modalLastname = document.getElementById("modalLastname");
+let modalLastname = document.getElementById("modalLastname");
 
 // Get the button that opens the modal
-var btnLastname = document.getElementById("btnLastname");
+let btnLastname = document.getElementById("btnLastname");
 
 // Get the <span> element that closes the modal
-var spanLastname = document.getElementsByClassName("close")[0];
+let spanLastname = document.getElementsByClassName("close")[0];
 
 // When the user clicks the button, open the modal 
 btnLastname.onclick = function() {
@@ -28,10 +28,10 @@ window.onclick = function(event) {
 
 // PERSON BY DATE
 // Get the modal
-var modalDate = document.getElementById("modalDate");
+let modalDate = document.getElementById("modalDate");
 
 // Get the button that opens the modal
-var btnDate = document.getElementById("btnDate");
+let btnDate = document.getElementById("btnDate");
 
 // Get the <span> element that closes the modal
 var spanDate = document.getElementsByClassName("close")[1];
@@ -56,13 +56,13 @@ window.onclick = function(event) {
 // PERSON BY REFUGEE and VOCATION
 
 // Get the modal
-var modalFilter = document.getElementById("modalFilter");
+let modalFilter = document.getElementById("modalFilter");
 
 // Get the button that opens the modal
-var btnFilter = document.getElementById("btnFilter");
+let btnFilter = document.getElementById("btnFilter");
 
 // Get the <span> element that closes the modal
-var spanFilter = document.getElementsByClassName("close")[2];
+let spanFilter = document.getElementsByClassName("close")[2];
 
 // When the user clicks the button, open the modal
 btnFilter.onclick = function() {
@@ -83,13 +83,13 @@ window.onclick = function(event) {
 
 // PERSON BY FHONE
 // Get the modal
-var modalPhone = document.getElementById("modalPhone");
+let modalPhone = document.getElementById("modalPhone");
 
 // Get the button that opens the modal
-var btnPhone = document.getElementById("btnPhone");
+let btnPhone = document.getElementById("btnPhone");
 
 // Get the <span> element that closes the modal
-var spanPhone = document.getElementsByClassName("close")[3];
+let spanPhone = document.getElementsByClassName("close")[3];
 
 // When the user clicks the button, open the modal
 btnPhone.onclick = function() {

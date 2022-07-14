@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -168,10 +169,10 @@ public class PersonService {
 
     // update data_table data in column text_location every hour if change geolocation data
 
-    @Scheduled(cron = "0 0 0/3 ? * *")
+    @Scheduled(cron = "${cron}")
     public void updateGeolocationData() throws IOException {
         logger.info("Update geolocation data in db if change by scheduled cron  = " + cron_data + " / updateGeolocationData method PersonService.class");
-        checkChangeGeolocationData(ehcacheManager.cacheManager().getCache("allPersons").get("full_list", ArrayList.class));
+        checkChangeGeolocationData(Objects.requireNonNull(ehcacheManager.cacheManager().getCache("allPersons")).get("full_list", List.class));
     }
 
     private void checkChangeGeolocationData(List<Person> personList)throws IOException{

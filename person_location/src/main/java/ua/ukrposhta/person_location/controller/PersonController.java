@@ -26,18 +26,12 @@ import java.util.stream.Collectors;
 @PropertySource("classpath:properties/site.properties")
 public class PersonController {
 
-    private Environment env;
     private PersonService personService;
     private Logger logger = LoggerFactory.getLogger(PersonController.class);
     @Value("${start}")
     private String start;
     @Value("${end}")
     private String end;
-
-    @Autowired
-    public void setEnv(Environment env) {
-        this.env = env;
-    }
 
     @Autowired
     public void setPersonService(PersonService personService) {
