@@ -73,6 +73,19 @@ buttonTopPlus.onclick = function () {
             let modalGoogleMap = "modalGoogleMap_" + i;
             let spanGoogleMap = "spanGoogleMap_" + i;
 
+            let vacation = person_list[i].vacation ? 'так' : 'ні';
+            console.log(vacation);
+            let refuge = person_list[i].refugee ? 'так' : 'ні';
+            console.log(refuge);
+            let able_for_work = person_list[i].able_for_work ? 'так' : 'ні';
+            console.log(able_for_work);
+            let work_remote = person_list[i].work_remote ? 'віддалено' : '';
+            console.log(work_remote);
+            let work_by_place = person_list[i].work_by_place ? 'за місцем роботи' : '';
+            console.log(work_by_place);
+            let war_zone = person_list[i].war_zone ? '&nbsp;- на даний час це є зона бойових дій' : '&nbsp;- на даний час це не є зоною бойових дій';
+            console.log(war_zone);
+
             let trString = "<tr class='pl-md-5' scope='row'><" +
                 "th class='pl-md-5 th_geolocation' scope='row'>" +
 
@@ -93,27 +106,27 @@ buttonTopPlus.onclick = function () {
                 "                                                        <div style='display: flex; flex-direction: row; flex-wrap: nowrap;'>\n" +
                 "                                                            <div style='margin-right: 5%; width: 30%;'  >\n" +
                 "                                                                <h6 >У відпусці : </h6>\n" +
-                "                                                                <p >" + (typeof person_list[i].vacation ? 'так' : 'ні') + "</p>\n" +
+                "                                                                <p >" + vacation + "</p>\n" +
                 "                                                            </div>\n" +
                 "                                                            <div style='margin-right: 5%; width: 30%;'  >\n" +
                 "                                                                <h6 >Біженець : </h6>\n" +
-                "                                                                <p >" + (typeof person_list[i].refugee ? 'так' : 'ні') + "</p>\n" +
+                "                                                                <p >" + refuge + "</p>\n" +
                 "                                                            </div>\n" +
                 "                                                            <div style='margin-right: 5%; width: 30%;'  >\n" +
                 "                                                            <h6 >Може працювати : </h6>\n" +
-                "                                                            <p >" + (typeof person_list[i].able_for_work ? 'так' : 'ні') + "</p>\n" +
+                "                                                            <p >" + able_for_work + "</p>\n" +
                 "                                                        </div>\n" +
                 "                                                            <div style='margin-right: 5%; width: 30%;' >\n" +
                 "                                                                <h6 >Працює : </h6>\n" +
-                "                                                                <p >" + (typeof person_list[i].work_remote ? 'віддалено' : '') + "</p>\n" +
-                "                                                                <p >" + (typeof person_list[i].work_by_place ? 'за місцем роботи' : '') + "</p>\n" +
+                "                                                                <p >" + work_remote + "</p>\n" +
+                "                                                                <p >" + work_by_place + "</p>\n" +
                 "                                                            </div>\n" +
                 "                                                        </div>\n" +
                 "                                                        <div style='display: flex; flex-direction: row; padding-left: 10%; width: 90%;'>\n" +
                 "                                                            <h6 >Регіон : &nbsp;</h6>\n" +
                 "                                                            <p >\n" +
                 "                                                                <span >" + person_list[i].state + "</span>\n" +
-                "                                                                <span >" + (typeof person_list[i].war_zone ? '&nbsp;- на даний час це є зона бойових дій' : '&nbsp;- на даний час це не є зоною бойових дій') + "</span>\n" +
+                "                                                                <span >" + war_zone + "</span>\n" +
                 "                                                            </p>\n" +
                 "                                                        </div>\n" +
                 "                                                    </div>\n" +
@@ -246,7 +259,18 @@ buttonTopMinus.onclick = function () {
             let btnGoogleMap = "btnGoogleMap_" + i;
             let modalGoogleMap = "modalGoogleMap_" + i;
             let spanGoogleMap = "spanGoogleMap_" + i;
-
+            let vacation = person_list[i].vacation ? 'так' : 'ні';
+            console.log(vacation);
+            let refuge = person_list[i].refugee ? 'так' : 'ні';
+            console.log(refuge);
+            let able_for_work = person_list[i].able_for_work ? 'так' : 'ні';
+            console.log(able_for_work);
+            let work_remote = person_list[i].work_remote ? 'віддалено' : '';
+            console.log(work_remote);
+            let work_by_place = person_list[i].work_by_place ? 'за місцем роботи' : '';
+            console.log(work_by_place);
+            let war_zone = person_list[i].war_zone ? '&nbsp;- на даний час це є зона бойових дій' : '&nbsp;- на даний час це не є зоною бойових дій';
+            console.log(war_zone);
 
             let trString = "<tr class='pl-md-5' scope='row'><" +
                 "th class='pl-md-5 th_geolocation' scope='row'>" +
@@ -268,27 +292,27 @@ buttonTopMinus.onclick = function () {
                 "                                                        <div style='display: flex; flex-direction: row; flex-wrap: nowrap;'>\n" +
                 "                                                            <div style='margin-right: 5%; width: 30%;'  >\n" +
                 "                                                                <h6 >У відпусці : </h6>\n" +
-                "                                                                <p >" + (typeof person_list[i].vacation ? 'так' : 'ні') + "</p>\n" +
+                "                                                                <p >" + vacation + "</p>\n" +
                 "                                                            </div>\n" +
                 "                                                            <div style='margin-right: 5%; width: 30%;'  >\n" +
                 "                                                                <h6 >Біженець : </h6>\n" +
-                "                                                                <p >" + (typeof person_list[i].refugee ? 'так' : 'ні') + "</p>\n" +
+                "                                                                <p >" + refuge + "</p>\n" +
                 "                                                            </div>\n" +
                 "                                                            <div style='margin-right: 5%; width: 30%;'  >\n" +
                 "                                                            <h6 >Може працювати : </h6>\n" +
-                "                                                            <p >" + (typeof person_list[i].able_for_work ? 'так' : 'ні') + "</p>\n" +
+                "                                                            <p >" + able_for_work + "</p>\n" +
                 "                                                        </div>\n" +
                 "                                                            <div style='margin-right: 5%; width: 30%;' >\n" +
                 "                                                                <h6 >Працює : </h6>\n" +
-                "                                                                <p >" + (typeof person_list[i].work_remote ? 'віддалено' : '') + "</p>\n" +
-                "                                                                <p >" + (typeof person_list[i].work_by_place ? 'за місцем роботи' : '') + "</p>\n" +
+                "                                                                <p >" + work_remote + "</p>\n" +
+                "                                                                <p >" + work_by_place + "</p>\n" +
                 "                                                            </div>\n" +
                 "                                                        </div>\n" +
                 "                                                        <div style='display: flex; flex-direction: row; padding-left: 10%; width: 90%;'>\n" +
                 "                                                            <h6 >Регіон : &nbsp;</h6>\n" +
                 "                                                            <p >\n" +
                 "                                                                <span >" + person_list[i].state + "</span>\n" +
-                "                                                                <span >" + (typeof person_list[i].war_zone ? '&nbsp;- на даний час це є зона бойових дій' : '&nbsp;- на даний час це не є зоною бойових дій') + "</span>\n" +
+                "                                                                <span >" + war_zone + "</span>\n" +
                 "                                                            </p>\n" +
                 "                                                        </div>\n" +
                 "                                                    </div>\n" +
@@ -419,7 +443,18 @@ buttonBottomMinus.onclick =function () {
             let btnGoogleMap = "btnGoogleMap_" + i;
             let modalGoogleMap = "modalGoogleMap_" + i;
             let spanGoogleMap = "spanGoogleMap_" + i;
-
+            let vacation = person_list[i].vacation ? 'так' : 'ні';
+            console.log(vacation);
+            let refuge = person_list[i].refugee ? 'так' : 'ні';
+            console.log(refuge);
+            let able_for_work = person_list[i].able_for_work ? 'так' : 'ні';
+            console.log(able_for_work);
+            let work_remote = person_list[i].work_remote ? 'віддалено' : '';
+            console.log(work_remote);
+            let work_by_place = person_list[i].work_by_place ? 'за місцем роботи' : '';
+            console.log(work_by_place);
+            let war_zone = person_list[i].war_zone ? '&nbsp;- на даний час це є зона бойових дій' : '&nbsp;- на даний час це не є зоною бойових дій';
+            console.log(war_zone);
 
             let trString = "<tr class='pl-md-5' scope='row'><" +
                 "th class='pl-md-5 th_geolocation' scope='row'>" +
@@ -441,27 +476,27 @@ buttonBottomMinus.onclick =function () {
                 "                                                        <div style='display: flex; flex-direction: row; flex-wrap: nowrap;'>\n" +
                 "                                                            <div style='margin-right: 5%; width: 30%;'  >\n" +
                 "                                                                <h6 >У відпусці : </h6>\n" +
-                "                                                                <p >" + (typeof person_list[i].vacation ? 'так' : 'ні') + "</p>\n" +
+                "                                                                <p >" + vacation + "</p>\n" +
                 "                                                            </div>\n" +
                 "                                                            <div style='margin-right: 5%; width: 30%;'  >\n" +
                 "                                                                <h6 >Біженець : </h6>\n" +
-                "                                                                <p >" + (typeof person_list[i].refugee ? 'так' : 'ні') + "</p>\n" +
+                "                                                                <p >" + refuge + "</p>\n" +
                 "                                                            </div>\n" +
                 "                                                            <div style='margin-right: 5%; width: 30%;'  >\n" +
                 "                                                            <h6 >Може працювати : </h6>\n" +
-                "                                                            <p >" + (typeof person_list[i].able_for_work ? 'так' : 'ні') + "</p>\n" +
+                "                                                            <p >" + able_for_work + "</p>\n" +
                 "                                                        </div>\n" +
                 "                                                            <div style='margin-right: 5%; width: 30%;' >\n" +
                 "                                                                <h6 >Працює : </h6>\n" +
-                "                                                                <p >" + (typeof person_list[i].work_remote ? 'віддалено' : '') + "</p>\n" +
-                "                                                                <p >" + (typeof person_list[i].work_by_place ? 'за місцем роботи' : '') + "</p>\n" +
+                "                                                                <p >" + work_remote + "</p>\n" +
+                "                                                                <p >" + work_by_place + "</p>\n" +
                 "                                                            </div>\n" +
                 "                                                        </div>\n" +
                 "                                                        <div style='display: flex; flex-direction: row; padding-left: 10%; width: 90%;'>\n" +
                 "                                                            <h6 >Регіон : &nbsp;</h6>\n" +
                 "                                                            <p >\n" +
                 "                                                                <span >" + person_list[i].state + "</span>\n" +
-                "                                                                <span >" + (typeof person_list[i].war_zone ? '&nbsp;- на даний час це є зона бойових дій' : '&nbsp;- на даний час це не є зоною бойових дій') + "</span>\n" +
+                "                                                                <span >" + war_zone + "</span>\n" +
                 "                                                            </p>\n" +
                 "                                                        </div>\n" +
                 "                                                    </div>\n" +
@@ -591,6 +626,18 @@ buttonBottomPlus.onclick = function () {
             let btnGoogleMap = "btnGoogleMap_" + i;
             let modalGoogleMap = "modalGoogleMap_" + i;
             let spanGoogleMap = "spanGoogleMap_" + i;
+            let vacation = person_list[i].vacation ? 'так' : 'ні';
+            console.log(vacation);
+            let refuge = person_list[i].refugee ? 'так' : 'ні';
+            console.log(refuge);
+            let able_for_work = person_list[i].able_for_work ? 'так' : 'ні';
+            console.log(able_for_work);
+            let work_remote = person_list[i].work_remote ? 'віддалено' : '';
+            console.log(work_remote);
+            let work_by_place = person_list[i].work_by_place ? 'за місцем роботи' : '';
+            console.log(work_by_place);
+            let war_zone = person_list[i].war_zone ? '&nbsp;- на даний час це є зона бойових дій' : '&nbsp;- на даний час це не є зоною бойових дій';
+            console.log(war_zone);
 
             let trString = "<tr class='pl-md-5' scope='row'><" +
                 "th class='pl-md-5 th_geolocation' scope='row'>" +
@@ -612,27 +659,27 @@ buttonBottomPlus.onclick = function () {
                 "                                                        <div style='display: flex; flex-direction: row; flex-wrap: nowrap;'>\n" +
                 "                                                            <div style='margin-right: 5%; width: 30%;'  >\n" +
                 "                                                                <h6 >У відпусці : </h6>\n" +
-                "                                                                <p >" + (typeof person_list[i].vacation ? 'так' : 'ні') + "</p>\n" +
+                "                                                                <p >" + vacation + "</p>\n" +
                 "                                                            </div>\n" +
                 "                                                            <div style='margin-right: 5%; width: 30%;'  >\n" +
                 "                                                                <h6 >Біженець : </h6>\n" +
-                "                                                                <p >" + (typeof person_list[i].refugee ? 'так' : 'ні') + "</p>\n" +
+                "                                                                <p >" + refuge + "</p>\n" +
                 "                                                            </div>\n" +
                 "                                                            <div style='margin-right: 5%; width: 30%;'  >\n" +
                 "                                                            <h6 >Може працювати : </h6>\n" +
-                "                                                            <p >" + (typeof person_list[i].able_for_work ? 'так' : 'ні') + "</p>\n" +
+                "                                                            <p >" + able_for_work + "</p>\n" +
                 "                                                        </div>\n" +
                 "                                                            <div style='margin-right: 5%; width: 30%;' >\n" +
                 "                                                                <h6 >Працює : </h6>\n" +
-                "                                                                <p >" + (typeof person_list[i].work_remote ? 'віддалено' : '') + "</p>\n" +
-                "                                                                <p >" + (typeof person_list[i].work_by_place ? 'за місцем роботи' : '') + "</p>\n" +
+                "                                                                <p >" + work_remote + "</p>\n" +
+                "                                                                <p >" + work_by_place + "</p>\n" +
                 "                                                            </div>\n" +
                 "                                                        </div>\n" +
                 "                                                        <div style='display: flex; flex-direction: row; padding-left: 10%; width: 90%;'>\n" +
                 "                                                            <h6 >Регіон : &nbsp;</h6>\n" +
                 "                                                            <p >\n" +
                 "                                                                <span >" + person_list[i].state + "</span>\n" +
-                "                                                                <span >" + (typeof person_list[i].war_zone ? '&nbsp;- на даний час це є зона бойових дій' : '&nbsp;- на даний час це не є зоною бойових дій') + "</span>\n" +
+                "                                                                <span >" + war_zone + "</span>\n" +
                 "                                                            </p>\n" +
                 "                                                        </div>\n" +
                 "                                                    </div>\n" +

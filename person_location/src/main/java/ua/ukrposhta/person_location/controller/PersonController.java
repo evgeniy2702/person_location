@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ua.ukrposhta.person_location.model.Person;
@@ -15,10 +14,7 @@ import ua.ukrposhta.person_location.service.PersonService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -304,6 +300,9 @@ public class PersonController {
             } else {
                 personList = personService.personListByDirectorate(directorate);
             }
+
+        personList.sort(Comparator.comparing(Person::getLastname));
+
         return personList;
     }
 

@@ -41,6 +41,4 @@ public class Person implements Serializable {
     private String user_messenger_id;
     private boolean not_provided_geo_too_long;
     private boolean on_occupied_territory;
-
-
 }
