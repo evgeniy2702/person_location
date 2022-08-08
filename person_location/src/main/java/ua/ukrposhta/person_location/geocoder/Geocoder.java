@@ -6,17 +6,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import ua.ukrposhta.person_location.controller.PersonController;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import java.net.URI;
+import java.util.Objects;
 
 @Component
 public class Geocoder {
 
     private Logger logger = LoggerFactory.getLogger(Geocoder.class);
     private RestTemplate restTemplate;
+    private WebClient webClient;
 
     @Autowired
-    public void setRestTemplate(RestTemplate restTemplate) {
+    public void setRestTemplate(RestTemplate restTemplate,
+                                WebClient webClient) {
         this.restTemplate = restTemplate;
+        this.webClient = webClient;
     }
 
 
@@ -28,13 +34,19 @@ public class Geocoder {
 
         String requestUri = GEOCODING_RESOURCE + "?format=jsonv2&lat=" + lat + "&lon=" + lng;
 
-        ResponseEntity<String> response = restTemplate.getForEntity(
-                requestUri,
-                String.class
-        );
+        ResponseEntity<String> responseWebClient = Objects.requireNonNull(webClient.get()
+                .uri(URI.create(requestUri))
+                .retrieve()
+                .toEntity(String.class))
+                .block();
 
-        logger.info("response status : " + response.getStatusCode().toString());
+//        ResponseEntity<String> response = restTemplate.getForEntity(
+//                requestUri,
+//                String.class
+//        );
 
-        return response.getBody();
+        logger.info("response status : " + Objects.requireNonNull(responseWebClient).getStatusCode().toString());
+
+        return responseWebClient.getBody();
     }
 }
